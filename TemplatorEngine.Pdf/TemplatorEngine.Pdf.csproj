@@ -2,7 +2,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <PackageVersion>1.0.0</PackageVersion>
+        <PackageVersion>1.0.1</PackageVersion>
         <Authors>Sebastian Bucko</Authors>
         <Owners>Sebastian Bucko</Owners>
         <PackageProjectUrl>https://github.com/sbc77/templator</PackageProjectUrl>
@@ -18,5 +18,8 @@
     <ItemGroup>
         <PackageReference Include="PdfSharpCore" Version="1.0.7" />
         <PackageReference Include="BarcodeCore" Version="1.0.0" />
+    </ItemGroup>
+    <ItemGroup>
+      <ProjectReference Include="..\TemplatorEngine.Core\TemplatorEngine.Core.csproj" />
     </ItemGroup>
 </Project>
