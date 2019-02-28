@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Template Debug="true">
+    <PageSettings Format="A5" Orientation="Portrait" Margin="15" />
+    <PageHeader>
+        <Image Src="logo.png" Width="90" Height="30" />
+    </PageHeader>
+    <ReportBody>
+        <Field DataField="CustomerName" />
+        <Field DataField="CustomerStreet" />
+        <Field DataField="CustomerZip" />
+        <Field DataField="CustomerCity" />
+        <Line />
+        <Field DataField="SsccNo" />
+        <Field DataField="ArticleId" />
+        <Field DataField="ArticleEan" />
+        <Field DataField="ArticleDescription" />
+        <Field DataField="Quantity" />
+        <Field DataField="CustomerReference" />
+        <Line />
+        <Barcode Type="GS1-128" DataField="Barcode1" />
+        <Barcode Type="GS1-128" DataField="Barcode2" />
+    </ReportBody>
+</Template>
