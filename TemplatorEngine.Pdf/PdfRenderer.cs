@@ -15,6 +15,8 @@ namespace TemplatorEngine.Pdf
         private const double HeaderHeight = 20;
         private const double FooterHeight = 20;
 
+        private static bool fontResolverAssigned;
+
         private readonly PdfConfig cfg;
 
         private readonly List<Type> renderers = new List<Type>();
@@ -33,7 +35,12 @@ namespace TemplatorEngine.Pdf
 
         public void Render(PrintTemplate template, object data)
         {
-            GlobalFontSettings.FontResolver = new FontResolver(this.cfg.FontPaths);
+            if (!fontResolverAssigned)
+            {
+                GlobalFontSettings.FontResolver = new FontResolver(this.cfg.FontPaths);
+                fontResolverAssigned = true;
+            }
+
             var document = new PdfDocument();
 
             var page = CreateNewPage(document, template, data);
