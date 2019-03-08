@@ -1,8 +1,8 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <TargetFramework>netcoreapp2.2</TargetFramework>
-        <PackageVersion>1.0.1</PackageVersion>
+        <PackageVersion>1.0.2</PackageVersion>
         <Authors>Sebastian Bucko</Authors>
         <Owners>Sebastian Bucko</Owners>
         <PackageProjectUrl>https://github.com/sbc77/templator</PackageProjectUrl>
@@ -11,6 +11,7 @@
         <Description>Simple templating engine for generating printouts (labels, invoices, etc) in PDF or SVG</Description>
         <PackageLicenseUrl>https://raw.githubusercontent.com/sbc77/templator/master/LICENSE</PackageLicenseUrl>
         <PackOnBuild>true</PackOnBuild>
+        <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
     </PropertyGroup>
     <ItemGroup>
         <Folder Include="Model\" />
