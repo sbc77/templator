@@ -11,5 +11,8 @@ namespace TemplatorEngine.Core.Model.Element
     {
         [XmlAttribute]
         public string DataField { get; set; }
+        
+        [XmlAttribute]
+        public int Lines { get; set; }
     }
 }

@@ -27,9 +27,9 @@ namespace TemplatorEngine.Core
             this.renderer.Render(this.printTemplate, data);
         }
 
-        public void SetRenderer(ITemplateRenderer renderer)
+        public void SetRenderer(ITemplateRenderer rend)
         {
-            this.renderer = renderer;
+            this.renderer = rend;
         }
 
         public static Templator Create(string templateFilePath)

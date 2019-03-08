@@ -14,7 +14,7 @@ namespace pdfCoreTest
                 CustomerZip = "CH 2555",
                 CustomerCity = "Brügg",
                 SsccNo = "376113650000131748",
-                ArticleDescription = "Ordner, 7 cm, gelb",
+                ArticleDescription = "Ordner, 7 cm, gelb, actually this is really long article description.",
                 ArticleId = "07610811240002",
                 ArticleEan = "07610811240002",
                 CustomerReference = "4591354435",

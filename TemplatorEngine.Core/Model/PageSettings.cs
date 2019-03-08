@@ -36,20 +36,19 @@ namespace TemplatorEngine.Core.Model
 
         public void Initialize()
         {
-            if (this.Format != null)
-            {
-                var d = dimensions.Single(x => x.Name == this.Format);
+            if (this.Format == null) return;
+            
+            var d = this.dimensions.Single(x => x.Name == this.Format);
 
-                if (this.Orientation == Orientation.Portrait)
-                {
-                    this.Width = d.Width;
-                    this.Height = d.Height;
-                }
-                else
-                {
-                    this.Width = d.Height;
-                    this.Height = d.Width;
-                }
+            if (this.Orientation == Orientation.Portrait)
+            {
+                this.Width = d.Width;
+                this.Height = d.Height;
+            }
+            else
+            {
+                this.Width = d.Height;
+                this.Height = d.Width;
             }
         }
     }

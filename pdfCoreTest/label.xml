@@ -13,7 +13,7 @@
         <Field DataField="SsccNo" />
         <Field DataField="ArticleId" />
         <Field DataField="ArticleEan" />
-        <Field DataField="ArticleDescription" />
+        <Field DataField="ArticleDescription" Lines="2" />
         <Field DataField="Quantity" />
         <Field DataField="CustomerReference" />
         <Line />
