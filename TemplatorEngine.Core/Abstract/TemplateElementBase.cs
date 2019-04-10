@@ -1,6 +1,7 @@
 ﻿
 
 using System.Xml.Serialization;
+using TemplatorEngine.Core.Element;
 
 namespace TemplatorEngine.Core.Abstract
 {
@@ -17,5 +18,6 @@ namespace TemplatorEngine.Core.Abstract
 
         [XmlAttribute]
         public double Height { get; set; }
+       
     }
 }

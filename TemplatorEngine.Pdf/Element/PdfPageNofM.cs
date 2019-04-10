@@ -1,7 +1,9 @@
-﻿using System;
+﻿/*
+using System;
+using System.Runtime.InteropServices.ComTypes;
 using PdfSharpCore.Pdf;
+using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
-using TemplatorEngine.Core.Model.Element;
 
 namespace TemplatorEngine.Pdf.Element
 {
@@ -12,9 +14,10 @@ namespace TemplatorEngine.Pdf.Element
 
         }
 
-        public override void Render(PdfPage page, Positon currentPosition)
+        public override void Render(PdfRenderContext ctx)
         {
 
         }
     }
 }
+*/

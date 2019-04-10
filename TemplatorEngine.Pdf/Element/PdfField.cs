@@ -1,11 +1,77 @@
+
 using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Reflection;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Drawing.Layout;
+using TemplatorEngine.Core.Abstract;
+using TemplatorEngine.Core.Element;
+
+namespace TemplatorEngine.Pdf.Element
+{
+    public class PdfField : PdfElementRendererBase<Field>
+    {
+        private const double LabelWidth = 100;
+        private const double LineHeight = 18;
+
+        protected override void OnRender(Field element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
+        {
+            if (element.Height <= 0)
+            {
+                element.Height = LineHeight;
+            }
+            
+            var pos = ctx.GetPosition(element.Width, element.Height);
+
+            if (element.Lines == 0)
+            {
+                element.Lines = 1;
+            }
+
+            var propData = data.Single(x => x.Name == element.DataField);
+
+            using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
+            {
+                var labelFont = new XFont("Arial Narrow", 12, XFontStyle.Bold);
+                var valueFont = new XFont("Arial Narrow", 14);
+
+                var p1 = pos.AsXPoint();
+
+                gfx.DrawString(propData.Label, labelFont, XBrushes.Black, p1);
+
+                var text = propData.Value as string;
+
+                if (text == null)
+                {
+                    return;
+                }
+
+                var p2 = new XPoint(p1.X, p1.Y - LineHeight + 5);
+                p2.X += LabelWidth;
+
+                var tf = new XTextFormatter(gfx);
+                var px = new XPoint(ctx.CurrentPage.Width - ctx.Margin, p1.Y + element.Height - 15);
+
+                var rect = new XRect(p2, px);
+
+                // gfx.DrawRectangle(XBrushes.Silver,rect);
+                tf.DrawString(text, valueFont, XBrushes.Black, rect);
+            }
+        }
+    }
+}
+
+
+/*using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Drawing.Layout;
 using PdfSharpCore.Pdf;
+using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
-using TemplatorEngine.Core.Model.Element;
 
 namespace TemplatorEngine.Pdf.Element
 {
@@ -43,15 +109,15 @@ namespace TemplatorEngine.Pdf.Element
             this.text = Convert.ToString(prop.GetValue(data));
         }
 
-        public override void Render(PdfPage page, Positon currentPosition)
+        public override void Render(PdfRenderContext ctx)
         {
            
-            using (var gfx = XGraphics.FromPdfPage(page))
+            using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
                 var labelFont = new XFont("Arial Narrow", 12, XFontStyle.Bold);
                 var valueFont = new XFont("Arial Narrow", 14);
 
-                var p1 = currentPosition.AsXPoint();
+                var p1 = ctx.AsXPoint();
                 p1.Y = p1.Y - ((this.lines-1)*LineHeight);
 
                 gfx.DrawString(this.label, labelFont, XBrushes.Black, p1);
@@ -64,20 +130,19 @@ namespace TemplatorEngine.Pdf.Element
                 var p2 = new XPoint(p1.X, p1.Y-LineHeight+5);
                 p2.X += LabelWidth;
                 
-                
                 var sf = new XStringFormat();
                 sf.LineAlignment = XLineAlignment.Near;
                 sf.Alignment = XStringAlignment.Near;
                 
                 var tf = new XTextFormatter(gfx);
-                var px = new XPoint(page.Width-currentPosition.Margin, p1.Y+ this.Height-15);
+                var px = new XPoint(ctx.CurrentPage.Width - ctx.Margin, p1.Y + this.Height - 15);
                 
                 var rect = new XRect(p2,px);
 
                 // gfx.DrawRectangle(XBrushes.Silver,rect);
-                tf.DrawString(this.text, valueFont, XBrushes.Black,rect);
-                
+                tf.DrawString(this.text, valueFont, XBrushes.Black, rect);
             }
         }
     }
 }
+*/

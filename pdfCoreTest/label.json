@@ -1,0 +1,35 @@
+{
+  "PageSettings": {
+    "Orientation": 0,
+    "Format": "A5",
+    "Width": 0.0,
+    "Height": 0.0,
+    "Margin": 15.0
+  },
+  "PageHeader": [
+    {
+      "Src": "logo.png",
+      "X": 0.0,
+      "Y": 0.0,
+      "Width": 90.0,
+      "Height": 30.0
+    }
+  ],
+  "ReportBody": [
+    {
+      "DataField": "Rows",
+      "ItemReferenceName": "row",
+      "UseNewPage": true,
+      "Content": [
+        {
+          
+        }
+      ],
+      "X": 0.0,
+      "Y": 0.0,
+      "Width": 0.0,
+      "Height": 0.0
+    }
+  ],
+  "PageFooter": []
+}

@@ -1,19 +1,20 @@
-﻿using System;
+﻿/*
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Reflection;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
+using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
-using TemplatorEngine.Core.Model.Element;
 
 namespace TemplatorEngine.Pdf.Element
 {
     public class PdfTable : PdfElementRendererBase<Table>
     {
         private IEnumerable<object> rows;
-        const double rowHeight = 15;
+        const double RowHeight = 15;
 
         public override void OnSetup(Table element, object data)
         {
@@ -24,24 +25,24 @@ namespace TemplatorEngine.Pdf.Element
 
             this.rows = prop.GetValue(data) as IEnumerable<object>;
 
-            this.Height = rowHeight * this.rows.Count();
+            this.Height = RowHeight * this.rows.Count();
 
             // var da = prop.GetCustomAttribute<DisplayAttribute>();
 
             //this.label = da?.Name ?? element.DataField;
         }
 
-        public override void Render(PdfPage page, Positon currentPosition)
+        public override void Render(PdfRenderContext ctx)
         {
-            using (var gfx = XGraphics.FromPdfPage(page))
+            using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
                 var brush = new XPen(XColor.FromArgb(0, 0, 0));
                 var valueFont = new XFont("Arial Narrow", 14);
 
                 foreach (var row in this.rows)
                 {
-                    gfx.DrawString("row", valueFont, XBrushes.Black, new XPoint(currentPosition.X, currentPosition.Y));
-                    currentPosition.Y += rowHeight;
+                    gfx.DrawString("row", valueFont, XBrushes.Black,  new XPoint(ctx.CurrentPosition.X, ctx.CurrentPosition.Y));
+                    ctx.CurrentPosition.Y += RowHeight;
                 }
 
                 //gfx.DrawRectangle(brush, new XRect(currentPosition.X, currentPosition.Y, this.Width, this.Height));
@@ -49,3 +50,4 @@ namespace TemplatorEngine.Pdf.Element
         }
     }
 }
+*/

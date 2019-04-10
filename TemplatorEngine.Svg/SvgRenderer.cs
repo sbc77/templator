@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Model;
 
@@ -13,7 +14,7 @@ namespace TemplatorEngine.Svg
             this.cfg = cfg;
         }
 
-        public void Render(PrintTemplate template, object data)
+        public void Render(IEnumerable<PropertyData> data)
         {
             throw new NotImplementedException();
         }

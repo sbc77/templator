@@ -5,19 +5,23 @@
         <Image Src="logo.png" Width="90" Height="30" />
     </PageHeader>
     <ReportBody>
-        <Field DataField="CustomerName" />
-        <Field DataField="CustomerStreet" />
-        <Field DataField="CustomerZip" />
-        <Field DataField="CustomerCity" />
-        <Line />
-        <Field DataField="SsccNo" />
-        <Field DataField="ArticleId" />
-        <Field DataField="ArticleEan" />
-        <Field DataField="ArticleDescription" Lines="2" />
-        <Field DataField="Quantity" />
-        <Field DataField="CustomerReference" />
-        <Line />
-        <Barcode Type="GS1-128" DataField="Barcode1" />
-        <Barcode Type="GS1-128" DataField="Barcode2" />
+        <Iterator ItemReferenceName="i" DataField="Rows" UseNewPage="true">
+            <Items>
+                <Field DataField="CustomerName" />
+                <Field DataField="CustomerStreet" />
+                <Field DataField="CustomerZip" />
+                <Field DataField="CustomerCity" />
+                <Line />
+                <Field DataField="i.SsccNo" />
+                <Field DataField="i.ArticleId" />
+                <Field DataField="i.ArticleEan" />
+                <Field DataField="i.ArticleDescription" Lines="2" />
+                <Field DataField="i.Quantity" />
+                <Field DataField="CustomerReference" />
+                <Line />
+                <Barcode Type="GS1-128" DataField="i.Barcode1" />
+                <Barcode Type="GS1-128" DataField="i.Barcode2" />
+            </Items>
+        </Iterator>
     </ReportBody>
 </Template>

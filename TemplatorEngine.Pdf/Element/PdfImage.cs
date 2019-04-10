@@ -1,33 +1,22 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
-using TemplatorEngine.Core.Model;
-using TemplatorEngine.Core.Model.Element;
+using TemplatorEngine.Core.Abstract;
+using TemplatorEngine.Core.Element;
 
 namespace TemplatorEngine.Pdf.Element
 {
     public class PdfImage : PdfElementRendererBase<Image>
     {
-        private string src;
-
-        public override void OnSetup(Image element, object data)
+        protected override void OnRender(Image element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
-            this.Width = element.Width;
-            this.Height = element.Height;
-            this.src = element.Src;
-        }
-
-        public override void Render(PdfPage page, Positon currentPosition)
-        {
-            using (var gfx = XGraphics.FromPdfPage(page))
+            var width = element.Width;
+            var height = element.Height;
+            var pos = ctx.GetPosition(width, height);
+            
+            using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
-                var img = XImage.FromFile(this.src);
-
-                var rect = new XRect(
-                    currentPosition.X + currentPosition.Margin,
-                    currentPosition.Y + currentPosition.Margin,
-                    this.Width,
-                    this.Height);
+                var img = XImage.FromFile(element.Src);
+                var rect = new XRect(pos.X,pos.Y,width,height);
 
                 gfx.DrawImage(img, rect);
             }

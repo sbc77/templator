@@ -1,8 +1,7 @@
-﻿
-using System.Xml.Serialization;
+﻿using System.Xml.Serialization;
 using TemplatorEngine.Core.Abstract;
 
-namespace TemplatorEngine.Core.Model.Element
+namespace TemplatorEngine.Core.Element
 {
     public class Image : TemplateElementBase
     {

@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 using TemplatorEngine.Core.Abstract;
-using TemplatorEngine.Core.Model.Element;
+using TemplatorEngine.Core.Element;
 
 namespace TemplatorEngine.Core.Model
 {
@@ -26,6 +26,7 @@ namespace TemplatorEngine.Core.Model
         [XmlArrayItem(Type = typeof(Label))]
         [XmlArrayItem(Type = typeof(Image))]
         [XmlArrayItem(Type = typeof(Barcode))]
+        [XmlArrayItem(Type = typeof(Iterator))]
         public List<TemplateElementBase> ReportBody { get; set; }
 
 

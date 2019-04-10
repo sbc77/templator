@@ -1,9 +1,10 @@
-﻿using TemplatorEngine.Core.Model;
+﻿using System.Collections.Generic;
+using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Core.Abstract
 {
     public interface ITemplateRenderer
     {
-        void Render(PrintTemplate template, object data);
+        void Render(IEnumerable<PropertyData> data);
     }
 }
