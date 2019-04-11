@@ -5,9 +5,11 @@
         <Image Src="logo.png" Width="90" Height="30" />
     </PageHeader>
     <ReportBody>
+        <Line />
         <Label Text="This is just label" />
         <Iterator ItemReferenceName="i" DataField="Rows" UseNewPage="true">
             <Items>
+                <Line />
                 <Field DataField="CustomerName" />
                 <Field DataField="CustomerStreet" />
                 <Field DataField="CustomerZip" />

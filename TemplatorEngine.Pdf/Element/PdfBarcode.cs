@@ -45,12 +45,11 @@ namespace TemplatorEngine.Pdf.Element
 
             this.gs1 = BarcodeFactory.Create(bt);
 
+            const int barcodeHeight = 100;
+            var bPos = ctx.GetPosition(0, barcodeHeight);
             
             using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
-                const int barcodeHeight = 100;
-                var bPos = ctx.GetPosition(0, barcodeHeight);
-                
                 this.gs1.OnRenderBar = (bar) =>
                 {
                     var pen = new XPen(XColors.Transparent);

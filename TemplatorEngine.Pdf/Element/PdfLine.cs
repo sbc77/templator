@@ -10,15 +10,15 @@ namespace TemplatorEngine.Pdf.Element
     {
         protected override void OnRender(Line element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
+            if (element.Height <= 0)
+            {
+                element.Height = 10;
+            }
+            
+            var pos = ctx.GetPosition(0, element.Height);
+            
             using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
-                if (element.Height <= 0)
-                {
-                    element.Height = 10;
-                }
-
-                var pos = ctx.GetPosition(0, element.Height);
-
                 var pos1 = new Position(pos.X, pos.Y + element.Height / 2); // in the middle of requested height
                 var pos2 = new Position(ctx.GetMaxWidth(),pos1.Y);
 
