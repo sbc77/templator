@@ -27,14 +27,14 @@ namespace TemplatorEngine.Pdf.Element
             {
                 this.DrawItem(gfx, pos, labelWidth-1, propData.Label);
 
-                if (!(propData.Value is string text))
+                if (propData.Value ==null)
                 {
                     return;
                 }
                 
                 var p = new Position(pos.X + labelWidth, pos.Y);
                 
-                this.DrawItem(gfx, p,ctx.GetMaxWidth()-labelWidth, text, true);
+                this.DrawItem(gfx, p,ctx.GetMaxWidth()-labelWidth, propData.Value.ToString(), true);
             }
         }
 
