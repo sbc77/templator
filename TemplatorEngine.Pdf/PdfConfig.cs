@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace TemplatorEngine.Pdf
+﻿namespace TemplatorEngine.Pdf
 {
     public class PdfConfig
     {

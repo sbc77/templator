@@ -1,32 +1,30 @@
+
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using BarcodeCore;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
-using TemplatorEngine.Core.Model;
-using TemplatorEngine.Core.Model.Element;
+using TemplatorEngine.Core.Abstract;
+using TemplatorEngine.Core.Element;
 
 namespace TemplatorEngine.Pdf.Element
 {
     public class PdfBarcode : PdfElementRendererBase<Barcode>
     {
         private IBarcode gs1;
-        private const int spacing = 10;
-        private string barcodeStr;
 
-        public override void OnSetup(Barcode element, object data)
+        protected override void OnRender(Barcode element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
-            this.Height = 80 + spacing * 2;
-
-            var prop = data.GetType().GetProperty(element.DataField);
+            var prop = data.SingleOrDefault(x => x.Name == element.DataField);
 
             if (prop == null)
             {
                 throw new Exception($"Requested property [{element.DataField}] does not exists");
             }
 
-            this.barcodeStr = prop.GetValue(data) as string;
+            var barcodeStr = prop.Value as string;
 
-            if (this.barcodeStr == null)
+            if (barcodeStr == null)
             {
                 throw new Exception("Barcode cannot be NULL");
             }
@@ -47,24 +45,26 @@ namespace TemplatorEngine.Pdf.Element
 
             this.gs1 = BarcodeFactory.Create(bt);
 
-        }
-
-        public override void Render(PdfPage page, Positon currentPosition)
-        {
-            using (var gfx = XGraphics.FromPdfPage(page))
+            
+            using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
-                gs1.OnRenderBar = (bar) =>
+                const int barcodeHeight = 100;
+                var bPos = ctx.GetPosition(0, barcodeHeight);
+                
+                this.gs1.OnRenderBar = (bar) =>
                 {
                     var pen = new XPen(XColors.Transparent);
                     var brush = XBrushes.Black;
 
-                    var y = currentPosition.Y - this.Height + currentPosition.Margin + spacing;
-                    gfx.DrawRectangle(pen, brush, bar.X * 1.40 + currentPosition.Margin, y, bar.Width * 1.8, this.Height - spacing * 2);
+                    
+                    gfx.DrawRectangle(pen, brush, bar.X * 1.40 + ctx.PageSettings.Margin, bPos.Y, bar.Width * 1.8, barcodeHeight-12);
                 };
 
                 var valueFont = new XFont("Arial Narrow", 14);
-                gs1.Render(this.barcodeStr);
-                gfx.DrawString(this.barcodeStr, valueFont, XBrushes.Black, currentPosition.AsXPoint());
+                this.gs1.Render(barcodeStr);
+                
+                var tPos = ctx.GetPosition(0, 10);
+                gfx.DrawString(barcodeStr, valueFont, XBrushes.Black, tPos.AsXPoint());
             }
         }
     }

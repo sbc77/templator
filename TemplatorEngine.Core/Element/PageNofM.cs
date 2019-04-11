@@ -2,7 +2,7 @@
 
 using TemplatorEngine.Core.Abstract;
 
-namespace TemplatorEngine.Core.Model.Element
+namespace TemplatorEngine.Core.Element
 {
     public class PageNofM : TemplateElementBase
     {

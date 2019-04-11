@@ -17,5 +17,6 @@ namespace TemplatorEngine.Core.Abstract
 
         [XmlAttribute]
         public double Height { get; set; }
+       
     }
 }

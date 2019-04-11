@@ -8,13 +8,18 @@ namespace TemplatorEngine.Pdf
     {
         public static Templator UsePdfRenderer(this Templator templator, PdfConfig cfg)
         {
-            templator.SetRenderer(new PdfRenderer(cfg));
+            templator.SetRenderer(new PdfRenderer(cfg, templator.PrintTemplate));
             return templator;
         }
 
-        public static XPoint AsXPoint(this Positon position)
+        public static XPoint AsXPoint(this Position pos)
         {
-            return new XPoint(position.X + position.Margin, position.Y + position.Margin);
+            return new XPoint(pos.X , pos.Y );
         }
+
+        /*public static PropertyData GetPropertyData(this object data, string name)
+        {
+     
+        }*/
     }
 }

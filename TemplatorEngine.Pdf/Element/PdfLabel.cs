@@ -1,26 +1,36 @@
-﻿using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
+﻿
+using System.Collections.Generic;
+using PdfSharpCore.Drawing;
+using PdfSharpCore.Drawing.Layout;
+using TemplatorEngine.Core.Abstract;
+using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
-using TemplatorEngine.Core.Model.Element;
 
 namespace TemplatorEngine.Pdf.Element
 {
     public class PdfLabel : PdfElementRendererBase<Label>
     {
-        private string text;
-        public override void OnSetup(Label element, object data)
-        {
-            this.text = element.Text;
-            this.Height = 15;
-        }
+        private double lineHeight;
 
-        public override void Render(PdfPage page, Positon currentPosition)
+        protected override void OnRender(Label element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
-            using (var gfx = XGraphics.FromPdfPage(page))
+            this.lineHeight = element.Height <= 0 ? 14 : element.Height;
+
+            if (element.Width <= 0)
             {
-                var font = new XFont("Arial", 12, XFontStyle.Bold);
-                gfx.DrawString(this.text, font, XBrushes.Black, new XPoint(currentPosition.X, currentPosition.Y));
+                element.Width = ctx.GetMaxWidth();
+            }
 
+            var p1 = ctx.GetPosition(element.Width, this.lineHeight + 1);
+            
+            using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
+            {
+                var p2 = new Position(p1.X + element.Width, p1.Y + this.lineHeight);
+                var rect = new XRect(p1.AsXPoint(), p2.AsXPoint());
+            
+                var labelFont = new XFont("Arial Narrow", 12, XFontStyle.Regular);
+                var tf = new XTextFormatter(gfx);
+                tf.DrawString(element.Text, labelFont, XBrushes.Black, rect);
             }
         }
     }

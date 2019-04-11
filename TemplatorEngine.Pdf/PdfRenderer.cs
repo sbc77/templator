@@ -1,16 +1,53 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using PdfSharpCore.Fonts;
 using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Model;
-using TemplatorEngine.Pdf.Element;
 
 namespace TemplatorEngine.Pdf
 {
     public class PdfRenderer : ITemplateRenderer
+    {
+        private readonly PdfConfig cfg;
+        private readonly PrintTemplate template;
+        private readonly PdfDocument document;
+        
+        private static bool fontResolverAssigned;
+
+        public PdfRenderer(PdfConfig config, PrintTemplate template)
+        {
+            this.cfg = config;
+            this.template = template;
+            this.document = new PdfDocument();   
+        }
+
+        public void Render(IEnumerable<PropertyData> d)
+        {
+            Debug.WriteLine("Rendering started");
+            var data = d.ToList();
+            
+            if (!fontResolverAssigned)
+            {
+                GlobalFontSettings.FontResolver = new FontResolver(this.cfg.FontPaths);
+                fontResolverAssigned = true;
+            }
+
+            var ctx = new PdfRenderContext(this.template, this.document, data);
+
+            Debug.WriteLine($"Rendering body");
+            foreach (var element in this.template.ReportBody)
+            {
+                ctx.RenderElement(element);
+            }
+
+            Debug.WriteLine("Saving to PDF file");
+            this.document.Save(this.cfg.OutFile);
+        }
+    }
+
+    /*public class PdfRendererOld : ITemplateRenderer
     {
         private const double HeaderHeight = 20;
         private const double FooterHeight = 20;
@@ -20,10 +57,13 @@ namespace TemplatorEngine.Pdf
         private readonly PdfConfig cfg;
 
         private readonly List<Type> renderers = new List<Type>();
+        private readonly PdfDocument document;
+        private PrintTemplate template;
 
-        public PdfRenderer(PdfConfig config)
+        public PdfRendererOld(PdfConfig config)
         {
             this.cfg = config;
+            this.document = new PdfDocument();
             this.renderers.Add(typeof(PdfField));
             this.renderers.Add(typeof(PdfImage));
             this.renderers.Add(typeof(PdfLabel));
@@ -31,93 +71,95 @@ namespace TemplatorEngine.Pdf
             this.renderers.Add(typeof(PdfPageNofM));
             this.renderers.Add(typeof(PdfTable));
             this.renderers.Add(typeof(PdfBarcode));
+            this.renderers.Add(typeof(PdfIterator));
         }
 
-        public void Render(PrintTemplate template, object data)
+        public void Render(PrintTemplate tmp, object data)
         {
+            this.template = tmp;
+            
             if (!fontResolverAssigned)
             {
                 GlobalFontSettings.FontResolver = new FontResolver(this.cfg.FontPaths);
                 fontResolverAssigned = true;
             }
 
-            var document = new PdfDocument();
+            // var page = this.CreateNewPage(document, template, data);
 
-            var page = CreateNewPage(document, template, data);
-
-            var currentPosition = new Positon
-            {
-                PageNo = 1,
-                Margin = template.PageSettings.Margin,
+            var ctx= new PdfRenderContext(() => this.CreateNewPage(data))
+            {               
+                Margin = this.template.PageSettings.Margin,
                 X = 0,
                 Y = HeaderHeight
             };
 
-            foreach (var element in template.ReportBody)
+            foreach (var element in this.template.ReportBody)
             {
-                this.RenderElement(document, element, template, data, page, currentPosition);
+                this.RenderElement( element, data, ctx);
             }
 
-            document.Save(this.cfg.OutFile);
+            this.document.Save(this.cfg.OutFile);
         }
 
-        private void RenderElement(PdfDocument document, TemplateElementBase element, PrintTemplate template, object data, PdfPage page, Positon currentPosition)
+        private void RenderElement(TemplateElementBase element, object data, PdfRenderContext ctx)
         {
             var elementRenderer = this.GetElementRenderer(element, data);
 
-            if (elementRenderer.Height + currentPosition.Y > page.Height.Point - FooterHeight)
+            if (elementRenderer.Height + ctx.Y > ctx.CurrentPage.Height.Point - FooterHeight)
             {
-                currentPosition.Y = currentPosition.Margin;
-                currentPosition.PageNo++;
-                page = CreateNewPage(document, template, data);
+                ctx.Y = ctx.Margin;
+                ctx.PageNo++;
+                ctx.CurrentPage = this.CreateNewPage( data);
             }
             else
             {
-                currentPosition.Y += elementRenderer.Height;
+                ctx.Y += elementRenderer.Height;
             }
 
-            elementRenderer.Render(page, currentPosition);
+            elementRenderer.Render(ctx);
         }
 
         private void RenderHeaderElement(TemplateElementBase element, object data, PdfPage page, double margin)
         {
             var elementRenderer = this.GetElementRenderer(element, data);
 
-            var cp = new Positon
+            var cp = new PdfRenderContext(() => this.CreateNewPage(data))
             {
+                CurrentPage = page,
                 Margin = margin
             };
 
-            elementRenderer.Render(page, cp);
+            elementRenderer.Render(cp);
         }
 
         private void RenderFooterElement(TemplateElementBase element, object data, PdfPage page, double margin)
         {
             var elementRenderer = this.GetElementRenderer(element, data);
 
-            var cp = new Positon
+            var cp = new PdfRenderContext(() => this.CreateNewPage(data))
             {
+                CurrentPage = page,
                 Margin = margin,
                 X = 0,
                 Y = page.Height.Point - FooterHeight
             };
 
-            elementRenderer.Render(page, cp);
+            elementRenderer.Render(cp);
         }
 
-        private PdfPage CreateNewPage(PdfDocument document, PrintTemplate template, object data)
+        private PdfPage CreateNewPage(object data)
         {
-            var page = document.AddPage();
-            page.Size = Enum.Parse<PdfSharpCore.PageSize>(template.PageSettings.Format);
+            var page = this.document.AddPage();
+            page.Size = Enum.Parse<PdfSharpCore.PageSize>(this.template.PageSettings.Format);
 
-            foreach (var element in template.PageHeader)
+            foreach (var element in this.template.PageHeader)
             {
-                this.RenderHeaderElement(element, data, page, template.PageSettings.Margin);
+                this.RenderHeaderElement(element, data, page, this.template.PageSettings.Margin);
             }
 
-            foreach (var element in template.PageFooter)
+            foreach (var element in this.template.PageFooter)
             {
-                this.RenderFooterElement(element, data, page, template.PageSettings.Margin);
+                this.RenderFooterElement(element, data, page, this.template.PageSettings.Margin);
             }
 
             return page;
@@ -125,28 +167,30 @@ namespace TemplatorEngine.Pdf
 
         private IPdfElementRenderer GetElementRenderer(TemplateElementBase element, object data)
         {
-            foreach (TypeInfo renderer in this.renderers)
+            foreach (var type in this.renderers)
             {
+                var renderer = (TypeInfo) type;
+                
                 var ii = renderer.BaseType;
-                if (ii.GenericTypeArguments.Any(x => x == element.GetType()))
+
+                if (ii.GenericTypeArguments.All(x => x != element.GetType()))
                 {
-                    var ri = Activator.CreateInstance(renderer) as IPdfElementRenderer;
-                    try
-                    {
-                        ri.GetType().GetMethod("Setup").Invoke(ri, new object[] { element, data });
-                    }
-                    catch (Exception e)
-                    {
-                        throw e.InnerException;
-                    }
-
-
+                    continue;
+                }
+                
+                try
+                {
+                    var ri = (IPdfElementRenderer)Activator.CreateInstance(renderer);
+                    ri.GetType().GetMethod("Setup").Invoke(ri, new object[] { element, data });
                     return ri;
-
+                }
+                catch (Exception e)
+                {
+                    throw e.InnerException;
                 }
             }
-
+            
             throw new Exception($"Cannot find PDF renderer for [{element.GetType().Name}]");
         }
-    }
+    }*/
 }

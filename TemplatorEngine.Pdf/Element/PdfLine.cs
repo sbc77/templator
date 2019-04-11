@@ -1,29 +1,28 @@
-﻿using System;
+﻿using System.Collections.Generic;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
+using TemplatorEngine.Core.Abstract;
+using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
-using TemplatorEngine.Core.Model.Element;
+
 namespace TemplatorEngine.Pdf.Element
 {
     public class PdfLine : PdfElementRendererBase<Line>
     {
-
-
-        public override void OnSetup(Line element, object data)
+        protected override void OnRender(Line element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
-            this.Height = 5;
-        }
-
-        public override void Render(PdfPage page, Positon currentPosition)
-        {
-            using (var gfx = XGraphics.FromPdfPage(page))
+            using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
-                var pt1 = currentPosition.AsXPoint();
-                var pt2 = currentPosition.AsXPoint();
+                if (element.Height <= 0)
+                {
+                    element.Height = 10;
+                }
 
-                pt2.X = page.Width.Point - currentPosition.Margin;
+                var pos = ctx.GetPosition(0, element.Height);
 
-                gfx.DrawLine(XPens.Black, pt1, pt2);
+                var pos1 = new Position(pos.X, pos.Y + element.Height / 2); // in the middle of requested height
+                var pos2 = new Position(ctx.GetMaxWidth(),pos1.Y);
+
+                gfx.DrawLine(XPens.Black, pos1.AsXPoint(), pos2.AsXPoint());
             }
         }
     }

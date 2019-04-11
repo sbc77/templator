@@ -1,83 +1,63 @@
-using System;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Drawing.Layout;
-using PdfSharpCore.Pdf;
+using TemplatorEngine.Core.Abstract;
+using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
-using TemplatorEngine.Core.Model.Element;
 
 namespace TemplatorEngine.Pdf.Element
 {
     public class PdfField : PdfElementRendererBase<Field>
     {
-        private string text;
-        private string label;
-        private int lines;
+        private double lineHeight;
+        private double lines;
 
-        private const double LabelWidth = 100;
-        private const double LineHeight = 18;
-
-        public override void OnSetup(Field element, object data)
+        protected override void OnRender(Field element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
-            if (element.Lines == 0)
-            {
-                element.Lines = 1;
-            }
-
-            this.lines = element.Lines;
+            this.lineHeight = element.Height <= 0 ? 14 : element.Height;
+            this.lines = element.Lines == 0 ? 1 : element.Lines;
             
-            this.Height = LineHeight * element.Lines;
-            this.Width = LabelWidth + 100;
+            var pos = ctx.GetPosition(element.Width, this.lineHeight * this.lines + 1 );
+            var propData = data.Single(x => x.Name == element.DataField);
 
-            var prop = data.GetType().GetProperty(element.DataField);
+            const double labelWidth = 100;
 
-            if (prop == null)
+            using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
-                throw new Exception($"Requested property [{element.DataField}] does not exists");
-            }
+                this.DrawItem(gfx, pos, labelWidth-1, propData.Label);
 
-            var da = prop.GetCustomAttribute<DisplayAttribute>();
-
-            this.label = da?.Name ?? element.DataField;
-            this.text = Convert.ToString(prop.GetValue(data));
-        }
-
-        public override void Render(PdfPage page, Positon currentPosition)
-        {
-           
-            using (var gfx = XGraphics.FromPdfPage(page))
-            {
-                var labelFont = new XFont("Arial Narrow", 12, XFontStyle.Bold);
-                var valueFont = new XFont("Arial Narrow", 14);
-
-                var p1 = currentPosition.AsXPoint();
-                p1.Y = p1.Y - ((this.lines-1)*LineHeight);
-
-                gfx.DrawString(this.label, labelFont, XBrushes.Black, p1);
-
-                if (this.text == null)
+                if (!(propData.Value is string text))
                 {
                     return;
                 }
-
-                var p2 = new XPoint(p1.X, p1.Y-LineHeight+5);
-                p2.X += LabelWidth;
                 
+                var p = new Position(pos.X + labelWidth, pos.Y);
                 
-                var sf = new XStringFormat();
-                sf.LineAlignment = XLineAlignment.Near;
-                sf.Alignment = XStringAlignment.Near;
-                
-                var tf = new XTextFormatter(gfx);
-                var px = new XPoint(page.Width-currentPosition.Margin, p1.Y+ this.Height-15);
-                
-                var rect = new XRect(p2,px);
-
-                // gfx.DrawRectangle(XBrushes.Silver,rect);
-                tf.DrawString(this.text, valueFont, XBrushes.Black,rect);
-                
+                this.DrawItem(gfx, p,ctx.GetMaxWidth()-labelWidth, text, true);
             }
         }
+
+        private void DrawItem(XGraphics gfx, Position p1, double width, string text, bool bold = false)
+        {
+            var p2 = new Position(p1.X + width, p1.Y + this.lineHeight * this.lines);
+            var rect = new XRect(p1.AsXPoint(), p2.AsXPoint());
+            
+            // debug
+            // this.DrawAnchor(gfx, p1);
+            // gfx.DrawRectangle(XBrushes.Silver,rect);
+            
+            var labelFont = new XFont("Arial Narrow", 12, bold ? XFontStyle.Bold : XFontStyle.Regular);
+            var tf = new XTextFormatter(gfx);
+            tf.DrawString(text, labelFont, XBrushes.Black, rect);
+        }
+
+        /*
+        private void DrawAnchor(XGraphics gfx, Position p)
+        {
+            gfx.DrawEllipse(XPens.Blue,p.X-1, p.Y-1, 2,2);
+        }*/
     }
 }
+
+
