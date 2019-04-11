@@ -1,12 +1,7 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Dynamic;
 using System.Linq;
-using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Element;
-using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Pdf.Element
 {
@@ -39,7 +34,7 @@ namespace TemplatorEngine.Pdf.Element
                 
                 if (element.UseNewPage)
                 {
-                    context.SetNewPage();
+                    context.RequestNewPage();
                 }
 
                 foreach (var rowItem in row)

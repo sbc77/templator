@@ -7,16 +7,15 @@ namespace TemplatorEngine.Core.Model
     {
         T CurrentPage { get; }
 
-        void SetNewPage();
+        void RequestNewPage();
 
         int PagesCount { get; }
-        
-        
-        double Margin { get; set; }
+
+        PageSettings PageSettings { get; }
         
         Position CurrentPosition { get;  }
 
-        void RenderElement(TemplateElementBase element, IEnumerable<PropertyData> data);
+        void RenderElement(TemplateElementBase element, IEnumerable<PropertyData> data = null);
 
         Position GetPosition(double width, double height);
     }

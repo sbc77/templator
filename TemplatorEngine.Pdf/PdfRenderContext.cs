@@ -14,20 +14,18 @@ namespace TemplatorEngine.Pdf
     {
         private readonly PrintTemplate template;
         private readonly PdfDocument document;
+        private readonly IEnumerable<PropertyData> data;
         private readonly List<Type> renderers = new List<Type>();
 
-        public PdfRenderContext(PrintTemplate template, PdfDocument document)
+        public PdfRenderContext(PrintTemplate template, PdfDocument document, IEnumerable<PropertyData> data)
         {
             this.template = template;
             this.document = document;
-            this.CurrentPosition = new Position(this.Margin, this.Margin);
+            this.data = data;
+            this.PageSettings = this.template.PageSettings;
+            this.CurrentPosition = new Position(this.PageSettings.Margin, this.PageSettings.Margin);
             
-            /*
             this.renderers.Add(typeof(PdfLabel));
-            this.renderers.Add(typeof(PdfPageNofM));
-            this.renderers.Add(typeof(PdfTable));
-            */
-            
             this.renderers.Add(typeof(PdfImage));
             this.renderers.Add(typeof(PdfBarcode));
             this.renderers.Add(typeof(PdfField));
@@ -35,39 +33,49 @@ namespace TemplatorEngine.Pdf
             this.renderers.Add(typeof(PdfIterator));
         }
         public PdfPage CurrentPage { get; private set; }
-        
-        // public Func<PdfPage> PageFactory { get; set; }
-        
-        public void SetNewPage()
-        {
-            this.CurrentPage = this.CreateNewPage();
-            this.CurrentPosition= new Position(this.Margin, this.Margin);
-            this.PagesCount++;
-        }
 
         public int PagesCount { get; private set; }
-
-        public double Margin { get; set; }
+        
+        public PageSettings PageSettings { get; }
         
         public Position CurrentPosition { get; private set; }
         
-        public void RenderElement(TemplateElementBase element, IEnumerable<PropertyData> data)
+        public void RenderElement(TemplateElementBase element, IEnumerable<PropertyData> d = null)
         {
             var renderer = this.GetRenderer(element);
 
-            renderer.GetType().GetMethod("Render").Invoke(renderer, new object[] {element, data, this});
+            if (d == null)
+            {
+                d = this.data;
+            }
+
+            this.ShowDebug($"Rendering element {element.GetType()}");
+            renderer.GetType().GetMethod("Render").Invoke(renderer, new object[] {element, d, this});
         }
 
         public Position GetPosition(double width, double height)
         {
+            if (this.CurrentPage == null)
+            {
+                this.RequestNewPage();
+            }
+            
             var oldPos = this.CurrentPosition;
 
-            this.CurrentPosition = new Position(this.Margin, oldPos.Y + height);
+            this.CurrentPosition = new Position(this.PageSettings.Margin, oldPos.Y + height);
 
             return oldPos;
         }
 
-        public double GetMaxWidth() => this.CurrentPage.Width - (this.Margin * 2) - this.CurrentPosition.X;
+        public double GetMaxWidth()
+        {
+            if (this.CurrentPage == null)
+            {
+                this.RequestNewPage();
+            }
+            
+            return this.CurrentPage.Width - (this.PageSettings.Margin * 2) - this.CurrentPosition.X;
+        }
 
         private object GetRenderer(TemplateElementBase element)
         {
@@ -95,32 +103,50 @@ namespace TemplatorEngine.Pdf
             throw new Exception($"Cannot find PDF renderer for [{element.GetType().Name}]");
         }
         
-        private PdfPage CreateNewPage(IEnumerable<PropertyData> data)
+        public void RequestNewPage()
         {
-            PdfPage page;
+            this.ShowDebug("New page request");
             
             if (this.document.PageCount == 0)
             {
-                page = this.document.AddPage();    
+                this.CreateNewPage();
             }
             else
             {
                 var c = this.document.Pages[this.document.PageCount - 1];
-                
-                page = HasContent(c) ? this.document.AddPage() : this.document.Pages[this.document.PageCount - 1];
+
+                if (HasContent(c))
+                {
+                    this.CreateNewPage();
+                }
+                else
+                {
+                    this.ShowDebug("Empty page re-used");
+                }
             }
             
-            page.Size = Enum.Parse<PageSize>(this.template.PageSettings.Format);
+            this.ShowDebug($"Rendering PageHeader Start");
             
             foreach (var element in this.template.PageHeader)
             {
-                this.RenderElement(element, data);
+                this.RenderElement(element);
             }
             
-            return page;
+            this.ShowDebug($"Rendering PageHeader End");
         }
-        
-        public static bool HasContent(PdfPage page)
+
+        private void CreateNewPage()
+        {
+            var page = this.document.AddPage();
+            this.CurrentPosition = new Position(this.PageSettings.Margin, this.PageSettings.Margin);
+            this.CurrentPage = page;
+            this.PagesCount++;
+            page.Size = Enum.Parse<PageSize>(this.template.PageSettings.Format);
+            
+            this.ShowDebug("New page added");
+        }
+
+        private static bool HasContent(PdfPage page)
         {
             for(var i = 0; i < page.Contents.Elements.Count; i++)
             {
@@ -130,6 +156,12 @@ namespace TemplatorEngine.Pdf
                 }
             }
             return false;
+        }
+
+        private void ShowDebug(string message)
+        {
+            var txt = $"{this.CurrentPosition} - {message}";
+            Console.WriteLine(txt);
         }
     }
 }

@@ -5,7 +5,6 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Xml.Serialization;
-using Newtonsoft.Json;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Model;
 

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
-using PdfSharpCore;
-using PdfSharpCore.Drawing;
 using PdfSharpCore.Fonts;
 using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Model;
-using TemplatorEngine.Pdf.Element;
 
 namespace TemplatorEngine.Pdf
 {
@@ -29,6 +25,7 @@ namespace TemplatorEngine.Pdf
 
         public void Render(IEnumerable<PropertyData> d)
         {
+            Debug.WriteLine("Rendering started");
             var data = d.ToList();
             
             if (!fontResolverAssigned)
@@ -37,17 +34,17 @@ namespace TemplatorEngine.Pdf
                 fontResolverAssigned = true;
             }
 
-            var ctx = new PdfRenderContext(this.template, this.document);
+            var ctx = new PdfRenderContext(this.template, this.document, data);
 
+            Debug.WriteLine($"Rendering body");
             foreach (var element in this.template.ReportBody)
             {
-                ctx.RenderElement(element, data);
+                ctx.RenderElement(element);
             }
 
+            Debug.WriteLine("Saving to PDF file");
             this.document.Save(this.cfg.OutFile);
         }
-
-      
     }
 
     /*public class PdfRendererOld : ITemplateRenderer

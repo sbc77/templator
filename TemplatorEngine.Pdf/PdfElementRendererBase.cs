@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Abstract;
-using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Pdf
 {

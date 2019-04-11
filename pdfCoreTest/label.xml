@@ -5,6 +5,7 @@
         <Image Src="logo.png" Width="90" Height="30" />
     </PageHeader>
     <ReportBody>
+        <Label Text="This is just label" />
         <Iterator ItemReferenceName="i" DataField="Rows" UseNewPage="true">
             <Items>
                 <Field DataField="CustomerName" />

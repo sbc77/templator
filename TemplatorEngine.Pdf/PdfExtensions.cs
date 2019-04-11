@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections;
-using System.ComponentModel.DataAnnotations;
-using System.Reflection;
-using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
+﻿using PdfSharpCore.Drawing;
 using TemplatorEngine.Core;
 using TemplatorEngine.Core.Model;
 

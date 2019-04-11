@@ -4,20 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using BarcodeCore;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Element;
-using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Pdf.Element
 {
     public class PdfBarcode : PdfElementRendererBase<Barcode>
     {
         private IBarcode gs1;
-        private const int spacing = 10;
-        private string barcodeStr;
-        
-
 
         protected override void OnRender(Barcode element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
@@ -28,9 +22,9 @@ namespace TemplatorEngine.Pdf.Element
                 throw new Exception($"Requested property [{element.DataField}] does not exists");
             }
 
-            this.barcodeStr = prop.Value as string;
+            var barcodeStr = prop.Value as string;
 
-            if (this.barcodeStr == null)
+            if (barcodeStr == null)
             {
                 throw new Exception("Barcode cannot be NULL");
             }
@@ -54,24 +48,23 @@ namespace TemplatorEngine.Pdf.Element
             
             using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
-                
-                var height = 80 + spacing * 2;
-                var pos = ctx.GetPosition(0, height);
+                const int barcodeHeight = 100;
+                var bPos = ctx.GetPosition(0, barcodeHeight);
                 
                 this.gs1.OnRenderBar = (bar) =>
                 {
                     var pen = new XPen(XColors.Transparent);
                     var brush = XBrushes.Black;
 
-                    //var y = ctx.CurrentPosition.Y - height + ctx.Margin + spacing;
                     
-                    
-                    gfx.DrawRectangle(pen, brush, bar.X * 1.40 + ctx.Margin, pos.Y, bar.Width * 1.8, height - spacing * 2);
+                    gfx.DrawRectangle(pen, brush, bar.X * 1.40 + ctx.PageSettings.Margin, bPos.Y, bar.Width * 1.8, barcodeHeight-12);
                 };
 
                 var valueFont = new XFont("Arial Narrow", 14);
-                this.gs1.Render(this.barcodeStr);
-                gfx.DrawString(this.barcodeStr, valueFont, XBrushes.Black, ctx.CurrentPosition.AsXPoint());
+                this.gs1.Render(barcodeStr);
+                
+                var tPos = ctx.GetPosition(0, 10);
+                gfx.DrawString(barcodeStr, valueFont, XBrushes.Black, tPos.AsXPoint());
             }
         }
     }

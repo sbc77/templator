@@ -20,7 +20,7 @@ namespace pdfCoreTest
                     new Gs1DataRow
                     {
                         SsccNo = "376113650000131748",
-                        ArticleDescription = "Ordner, 7 cm, gelb, actually this is really long article description.",
+                        ArticleDescription = "Ordner, 7 cm, gelb, actually this is really long article description, long enough to be wrapped.",
                         ArticleId = "07610811240002",
                         ArticleEan = "07610811240002",
                         Quantity = 40,

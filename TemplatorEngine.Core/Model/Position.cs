@@ -25,5 +25,10 @@ namespace TemplatorEngine.Core.Model
         public readonly double MaxWidth;
 
         public readonly double MaxHeight;
+
+        public override string ToString()
+        {
+            return $"X:{this.X:000.0} Y:{this.Y:000.0}";
+        }
     }
 }

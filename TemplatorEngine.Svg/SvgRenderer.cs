@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using TemplatorEngine.Core.Abstract;
-using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Svg
 {

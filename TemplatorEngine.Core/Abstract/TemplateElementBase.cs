@@ -1,7 +1,6 @@
 ﻿
 
 using System.Xml.Serialization;
-using TemplatorEngine.Core.Element;
 
 namespace TemplatorEngine.Core.Abstract
 {

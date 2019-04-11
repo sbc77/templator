@@ -1,8 +1,5 @@
-﻿
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
@@ -17,11 +14,13 @@ namespace TemplatorEngine.Pdf.Element
             {
                 if (element.Height <= 0)
                 {
-                    element.Height = 5;
+                    element.Height = 10;
                 }
 
-                var pos1 = ctx.GetPosition(0, element.Height);
-                var pos2 = new Position(pos1.X,ctx.GetMaxWidth());
+                var pos = ctx.GetPosition(0, element.Height);
+
+                var pos1 = new Position(pos.X, pos.Y + element.Height / 2); // in the middle of requested height
+                var pos2 = new Position(ctx.GetMaxWidth(),pos1.Y);
 
                 gfx.DrawLine(XPens.Black, pos1.AsXPoint(), pos2.AsXPoint());
             }
