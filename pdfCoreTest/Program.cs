@@ -1,4 +1,6 @@
 using System.Collections.Generic;
+using System.IO;
+using System.Net;
 using TemplatorEngine.Core;
 using TemplatorEngine.Pdf;
 
@@ -42,13 +44,14 @@ namespace pdfCoreTest
 
             var cfg = new PdfConfig
             {
-                OutFile = "result.pdf",
-                FontPaths = new string[] { "/Library/Fonts" } // this is configured for mac, on windows you have to change it
+                FontPaths = new []{ "/Library/Fonts" } // this is configured for mac, on windows you have to change it
             };
 
-            Templator.Create("label.xml")
+            var bytes = Templator.Create("label.xml")
                     .UsePdfRenderer(cfg)
                     .Render(data);
+            
+            File.WriteAllBytes("result.pdf",bytes);
         }
     }
 }

@@ -9,7 +9,7 @@
 
         public string[] FontPaths { get; set; }
 
-        public string OutFile { get; set; }
+        // public string OutFile { get; set; }
 
     }
 }

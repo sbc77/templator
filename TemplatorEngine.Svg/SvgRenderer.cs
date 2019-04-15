@@ -13,7 +13,7 @@ namespace TemplatorEngine.Svg
             this.cfg = cfg;
         }
 
-        public void Render(IEnumerable<PropertyData> data)
+        public byte[] Render(IEnumerable<PropertyData> data)
         {
             throw new NotImplementedException();
         }

@@ -4,6 +4,6 @@ namespace TemplatorEngine.Core.Abstract
 {
     public interface ITemplateRenderer
     {
-        void Render(IEnumerable<PropertyData> data);
+        byte[] Render(IEnumerable<PropertyData> data);
     }
 }

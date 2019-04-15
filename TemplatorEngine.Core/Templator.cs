@@ -26,12 +26,12 @@ namespace TemplatorEngine.Core
             }
         }
 
-        public void Render(object data)
+        public byte[] Render(object data)
         {
             this.PrintTemplate.PageSettings.Initialize();
             
             
-            this.renderer.Render(ConvertData(data));
+            return this.renderer.Render(ConvertData(data));
         }
 
         public void SetRenderer(ITemplateRenderer rend)

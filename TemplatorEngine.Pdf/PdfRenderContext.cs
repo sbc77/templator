@@ -55,7 +55,12 @@ namespace TemplatorEngine.Pdf
 
         public Position GetPosition(double width, double height)
         {
-            if (this.CurrentPage == null)
+            if (this.CurrentPage == null )
+            {
+                this.RequestNewPage();
+            }
+
+            if (this.CurrentPosition.Y + this.PageSettings.Margin+height > this.CurrentPage.Height.Value )
             {
                 this.RequestNewPage();
             }

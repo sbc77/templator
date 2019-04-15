@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using PdfSharpCore.Fonts;
 using PdfSharpCore.Pdf;
@@ -23,7 +24,7 @@ namespace TemplatorEngine.Pdf
             this.document = new PdfDocument();   
         }
 
-        public void Render(IEnumerable<PropertyData> d)
+        public byte[] Render(IEnumerable<PropertyData> d)
         {
             Debug.WriteLine("Rendering started");
             var data = d.ToList();
@@ -43,7 +44,13 @@ namespace TemplatorEngine.Pdf
             }
 
             Debug.WriteLine("Saving to PDF file");
-            this.document.Save(this.cfg.OutFile);
+            //this.document.Save(this.cfg.OutFile);
+            
+            using(MemoryStream stream = new MemoryStream()) 
+            { 
+                this.document.Save(stream, true); 
+                return stream.ToArray(); 
+            }
         }
     }
 

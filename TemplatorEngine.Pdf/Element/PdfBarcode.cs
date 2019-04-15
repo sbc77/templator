@@ -6,6 +6,7 @@ using BarcodeCore;
 using PdfSharpCore.Drawing;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Element;
+using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Pdf.Element
 {
@@ -45,24 +46,28 @@ namespace TemplatorEngine.Pdf.Element
 
             this.gs1 = BarcodeFactory.Create(bt);
 
-            const int barcodeHeight = 100;
+
+
+            var barcodeHeight = element.Height <= 0 ? 80 : element.Height;
             var bPos = ctx.GetPosition(0, barcodeHeight);
-            
             using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
+                
+                
                 this.gs1.OnRenderBar = (bar) =>
                 {
                     var pen = new XPen(XColors.Transparent);
                     var brush = XBrushes.Black;
 
                     
-                    gfx.DrawRectangle(pen, brush, bar.X * 1.40 + ctx.PageSettings.Margin, bPos.Y, bar.Width * 1.8, barcodeHeight-12);
+                    gfx.DrawRectangle(pen, brush, bar.X * 1.40 + ctx.PageSettings.Margin, bPos.Y, bar.Width * 1.8, barcodeHeight-20);
                 };
-
+                
                 var valueFont = new XFont("Arial Narrow", 14);
                 this.gs1.Render(barcodeStr);
                 
-                var tPos = ctx.GetPosition(0, 10);
+                
+                var tPos = new Position(bPos.X, bPos.Y+(barcodeHeight-7));
                 gfx.DrawString(barcodeStr, valueFont, XBrushes.Black, tPos.AsXPoint());
             }
         }

@@ -1,4 +1,4 @@
-
+﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "pdfCoreTest", "pdfCoreTest\pdfCoreTest.csproj", "{F159DC60-8D0E-4F06-8055-270C5A6D6A43}"
@@ -8,6 +8,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplatorEngine.Svg", "TemplatorEngine.Svg\TemplatorEngine.Svg.csproj", "{7972E4B3-CF5F-4EC7-ABA3-9CF63426D900}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplatorEngine.Core", "TemplatorEngine.Core\TemplatorEngine.Core.csproj", "{80BA34E0-A9DB-4211-A4EB-62B059921B3C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplatorEngineWebTest", "TemplatorEngineWebTest\TemplatorEngineWebTest.csproj", "{E856C836-3AC9-45D5-A16E-5795D2840840}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,5 +33,9 @@ Global
 		{80BA34E0-A9DB-4211-A4EB-62B059921B3C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{80BA34E0-A9DB-4211-A4EB-62B059921B3C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{80BA34E0-A9DB-4211-A4EB-62B059921B3C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E856C836-3AC9-45D5-A16E-5795D2840840}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E856C836-3AC9-45D5-A16E-5795D2840840}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E856C836-3AC9-45D5-A16E-5795D2840840}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E856C836-3AC9-45D5-A16E-5795D2840840}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

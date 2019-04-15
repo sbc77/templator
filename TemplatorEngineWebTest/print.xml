@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Template Debug="true">
+    <PageSettings Format="A4" Orientation="Portrait" Margin="25" />
+    <PageHeader>
+        
+    </PageHeader>
+    <ReportBody>
+        <Image Src="wwwroot/img/logo.png" Width="85" Height="30" />
+        <Line />
+        <Barcode Type="GS1-128" Height="40" DataField="SsccBarcode" />
+        <Line />
+        <Field DataField="ShipmentId" />
+        <Field DataField="CustomerName" />
+        <Field DataField="CustomerStreet" />
+        <Field DataField="CustomerZip" />
+        <Field DataField="CustomerCity" />
+        
+        <Line />
+        <Iterator ItemReferenceName="i" DataField="Lines">
+            <Items>
+                <Field DataField="i.ArticleEan" />
+                <Field DataField="i.ArticleDescription" Lines="2" />
+                <Field DataField="i.Quantity" />
+                <Barcode Type="GS1-128" Height="40" DataField="i.Barcode" />
+                <Line />
+            </Items>
+        </Iterator>
+    </ReportBody>
+</Template>
