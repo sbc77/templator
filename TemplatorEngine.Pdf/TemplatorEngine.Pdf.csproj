@@ -17,8 +17,8 @@
         <Folder Include="Element\" />
     </ItemGroup>
     <ItemGroup>
-        <PackageReference Include="PdfSharpCore" Version="1.0.7" />
-        <PackageReference Include="BarcodeCore" Version="1.0.0" />
+        <PackageReference Include="PdfSharpCore" Version="1.1.0" />
+        <PackageReference Include="BarcodeCore" Version="1.0.1" />
     </ItemGroup>
     <ItemGroup>
       <ProjectReference Include="..\TemplatorEngine.Core\TemplatorEngine.Core.csproj" />
