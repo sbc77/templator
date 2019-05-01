@@ -12,11 +12,13 @@ namespace pdfCoreTest
         {
             var data = new Gs1Data
             {
+                ShipmentId = 123456,
                 CustomerName = "Awesome Company Ltd",
                 CustomerStreet = "Industriestrasse 666",
                 CustomerZip = "CH 2555",
                 CustomerCity = "Brügg",
                 CustomerReference = "4591354435",
+                Group = "SBD-71",
                 Rows = new List<Gs1DataRow>
                 {
                     new Gs1DataRow
@@ -27,7 +29,9 @@ namespace pdfCoreTest
                         ArticleEan = "07610811240002",
                         Quantity = 40,
                         Barcode1 = "(02)07611365331178(37)112(400)20216916",
-                        Barcode2 = "(00)376113650002691578"        
+                        Barcode2 = "(00)376113650002691578",
+                        Package = "1 von 2"
+                        
                     },
                     new Gs1DataRow
                     {
@@ -37,7 +41,8 @@ namespace pdfCoreTest
                         ArticleEan = "07610811240001",
                         Quantity = 20,
                         Barcode1 = "(02)07611365331178(37)112(400)20216916",
-                        Barcode2 = "(00)376113650002691578"        
+                        Barcode2 = "(00)376113650002691581"        ,
+                        Package = "2 von 2"
                     }
                 }
             };

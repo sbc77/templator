@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using PdfSharpCore.Drawing;
@@ -15,48 +16,57 @@ namespace TemplatorEngine.Pdf.Element
 
         protected override void OnRender(Field element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
-            this.lineHeight = element.Height <= 0 ? 14 : element.Height;
+            var fontSize = Utils.GetGreaterThanZeroOrDefault(12, element.FontSize, ctx.PageSettings.FontSize);
+
+            element.LabelAlign = element.LabelAlign ?? "Left";
+            element.ValueAlign = element.ValueAlign ?? "Right";
+
+            var labelAlign = Enum.Parse<XParagraphAlignment>(element.LabelAlign);
+            var valueAlign = Enum.Parse<XParagraphAlignment>(element.ValueAlign);
+
+            this.lineHeight = element.Height <= 0 ? fontSize + 2 : element.Height;
             this.lines = element.Lines == 0 ? 1 : element.Lines;
             
             var pos = ctx.GetPosition(element.Width, this.lineHeight * this.lines + 1 );
-            var propData = data.Single(x => x.Name == element.DataField);
+            var propData =  data.SingleOrDefault(x => x.Name == element.DataField);
 
-            const double labelWidth = 100;
+            var labelWidth = Utils.GetGreaterThanZeroOrDefault(100, element.LabelWidth);
 
             using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
-                this.DrawItem(gfx, pos, labelWidth-1, propData.Label);
+                this.DrawItem(gfx, pos, labelWidth-1, element.Label ?? propData?.Label, fontSize, labelAlign);
 
-                if (propData.Value ==null)
+                if (propData?.Value ==null)
                 {
                     return;
                 }
                 
                 var p = new Position(pos.X + labelWidth, pos.Y);
                 
-                this.DrawItem(gfx, p,ctx.GetMaxWidth()-labelWidth, propData.Value.ToString(), true);
+                this.DrawItem(gfx, p,ctx.GetMaxWidth()-labelWidth, propData.Value.ToString(), fontSize,valueAlign,true);
             }
         }
 
-        private void DrawItem(XGraphics gfx, Position p1, double width, string text, bool bold = false)
+        private void DrawItem(XGraphics gfx, Position p1, double width, string text,double fontSize, XParagraphAlignment alignment, bool bold = false)
         {
             var p2 = new Position(p1.X + width, p1.Y + this.lineHeight * this.lines);
             var rect = new XRect(p1.AsXPoint(), p2.AsXPoint());
             
             // debug
-            // this.DrawAnchor(gfx, p1);
-            // gfx.DrawRectangle(XBrushes.Silver,rect);
+             //this.DrawAnchor(gfx, p1);
+             //gfx.DrawRectangle(XBrushes.Silver,rect);
             
-            var labelFont = new XFont("Arial Narrow", 12, bold ? XFontStyle.Bold : XFontStyle.Regular);
+            var labelFont = new XFont("Arial Narrow", fontSize, bold ? XFontStyle.Bold : XFontStyle.Regular);
             var tf = new XTextFormatter(gfx);
+            tf.Alignment = alignment;
             tf.DrawString(text, labelFont, XBrushes.Black, rect);
         }
 
-        /*
+        
         private void DrawAnchor(XGraphics gfx, Position p)
         {
             gfx.DrawEllipse(XPens.Blue,p.X-1, p.Y-1, 2,2);
-        }*/
+        }
     }
 }
 

@@ -25,5 +25,9 @@ namespace pdfCoreTest
         public string Barcode1 { get; set; }
 
         public string Barcode2 { get; set; }
+        
+        public string Package { get; set; }
+        
+        
     }
 }

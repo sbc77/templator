@@ -78,8 +78,8 @@ namespace TemplatorEngine.Pdf
             {
                 this.RequestNewPage();
             }
-            
-            return this.CurrentPage.Width - (this.PageSettings.Margin * 2) - this.CurrentPosition.X;
+
+            return this.CurrentPage.Width - (this.PageSettings.Margin * 2);// - this.CurrentPosition.X;
         }
 
         private object GetRenderer(TemplateElementBase element)

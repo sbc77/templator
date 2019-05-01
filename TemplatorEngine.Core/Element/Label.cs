@@ -7,5 +7,11 @@ namespace TemplatorEngine.Core.Element
     {
         [XmlAttribute]
         public string Text { get; set; }
+        
+        [XmlAttribute]
+        public double FontSize { get; set; }
+        
+        [XmlAttribute]
+        public string Align { get; set; }
     }
 }

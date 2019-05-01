@@ -26,6 +26,8 @@ namespace pdfCoreTest
         [Display(Name = "Cust. order No")]
         public string CustomerReference { get; set; }
         
+        public string Group { get; set; }
+        
         public IEnumerable<Gs1DataRow> Rows { get; set; }
     }
 }

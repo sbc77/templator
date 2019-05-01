@@ -33,6 +33,9 @@ namespace TemplatorEngine.Core.Model
 
         [XmlAttribute]
         public double Margin { get; set; }
+        
+        [XmlAttribute]
+        public double FontSize { get; set; }
 
         public void Initialize()
         {

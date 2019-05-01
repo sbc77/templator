@@ -19,10 +19,14 @@ namespace TemplatorEngine.Pdf.Element
             
             using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
             {
+                
                 var pos1 = new Position(pos.X, pos.Y + element.Height / 2); // in the middle of requested height
-                var pos2 = new Position(ctx.GetMaxWidth(),pos1.Y);
+                var pos2 = new Position(gfx.PdfPage.Width - ctx.PageSettings.Margin, pos1.Y);
+                
+                //var rect = new XRect(pos1.AsXPoint(),pos2.AsXPoint());
 
-                gfx.DrawLine(XPens.Black, pos1.AsXPoint(), pos2.AsXPoint());
+                gfx.DrawLine(XPens.Black, pos1.AsXPoint(),pos2.AsXPoint());
+                    //gfx.DrawRectangle(XPens.Black, rect);//pos1.AsXPoint(), pos2.AsXPoint());
             }
         }
     }

@@ -1,4 +1,5 @@
 ﻿
+using System;
 using System.Collections.Generic;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Drawing.Layout;
@@ -14,7 +15,13 @@ namespace TemplatorEngine.Pdf.Element
 
         protected override void OnRender(Label element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
-            this.lineHeight = element.Height <= 0 ? 14 : element.Height;
+            if (element.Align == null)
+            {
+                element.Align = "Left";
+            }
+            
+            var fontSize = Utils.GetGreaterThanZeroOrDefault(12, element.FontSize, ctx.PageSettings.FontSize);
+            this.lineHeight = element.Height <= 0 ? fontSize + 2 : element.Height;
 
             if (element.Width <= 0)
             {
@@ -28,8 +35,11 @@ namespace TemplatorEngine.Pdf.Element
                 var p2 = new Position(p1.X + element.Width, p1.Y + this.lineHeight);
                 var rect = new XRect(p1.AsXPoint(), p2.AsXPoint());
             
-                var labelFont = new XFont("Arial Narrow", 12, XFontStyle.Regular);
+                var labelFont = new XFont("Arial Narrow", fontSize, XFontStyle.Regular);
                 var tf = new XTextFormatter(gfx);
+
+                tf.Alignment = Enum.Parse<XParagraphAlignment>(element.Align);
+                
                 tf.DrawString(element.Text, labelFont, XBrushes.Black, rect);
             }
         }

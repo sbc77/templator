@@ -10,5 +10,14 @@ namespace TemplatorEngine.Core.Element
 
         [XmlAttribute]
         public string Type { get; set; }
+        
+        [XmlAttribute]
+        public string Label { get; set; }
+        
+        [XmlAttribute]
+        public double LabelFontSize { get; set; }
+        
+        [XmlAttribute]
+        public double Scale { get; set; }
     }
 }
