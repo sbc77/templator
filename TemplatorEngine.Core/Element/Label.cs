@@ -10,8 +10,14 @@ namespace TemplatorEngine.Core.Element
         [XmlAttribute]
         public string Text { get; set; }
         
-        [XmlAttribute]
+        [XmlIgnore]
         public double? FontSize { get; set; }
+        
+        [XmlAttribute("FontSize")]
+        public string FontSizeStr {
+            get => (this.FontSize.HasValue) ? this.FontSize.ToString() : null;
+            set => this.FontSize = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
+        }
         
         [XmlAttribute]
         public string Align { get; set; }
@@ -41,7 +47,7 @@ namespace TemplatorEngine.Core.Element
 
             var pe = new PrintableElement
             {
-                BaseType = typeof(Label),
+                ElementType = ElementType.Text,
                 Height = this.Height.Value,
                 Width = this.Width.Value,
                 X = context.CurrentX,

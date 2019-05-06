@@ -7,6 +7,7 @@ namespace TemplatorEngine.Pdf
     {
         protected abstract void OnRender(PrintableElement element,  PdfPage context);
         
+        public abstract ElementType ElementType { get; }
 
         public void Render(PrintableElement element, PdfPage page)
         {

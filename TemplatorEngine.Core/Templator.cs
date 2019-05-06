@@ -65,7 +65,7 @@ namespace TemplatorEngine.Core
 
             foreach (var element in elements)
             {
-                var p = pages.Single(x => element.Y >= x.MinY && element.Y <= x.MinY);
+                var p = pages.Single(x => element.Y >= x.MinY && element.Y <= x.MaxY);
                 p.Elements.Add(element);
             }
 

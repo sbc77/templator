@@ -25,7 +25,7 @@ namespace pdfCoreTest
                 FontPaths = new []{ "/Library/Fonts" } // this is configured for mac, on windows you have to change it
             };
 
-            var bytes = Templator.Create("label.xml")
+            var bytes = Templator.Create("Template/label.xml")
                 .UsePdfRenderer(cfg)
                 .Render(data);
             
@@ -41,7 +41,7 @@ namespace pdfCoreTest
                 FontPaths = new []{ "/Library/Fonts" } // this is configured for mac, on windows you have to change it
             };
 
-            var bytes = Templator.Create("invoice.xml")
+            var bytes = Templator.Create("Template/invoice.xml")
                 .UsePdfRenderer(cfg)
                 .Render(data);
             

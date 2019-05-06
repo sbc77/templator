@@ -1,19 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Template IsDebug="true">
     <PageSettings Format="A4" Orientation="Portrait" Margin="25" />
-    <PageHeader>
+    <!--PageHeader>
         <Column>
             <Label Text = "Invoice" Align="Center" />
             <Image Src="logo.png" Width="85" Height="30"  />
         </Column>
-    </PageHeader>
+    </PageHeader-->
     <ReportBody>
         <Column>
             <Field Label="Invoice No" DataField="No" />
             <Field Label="Created" DataField="Created" />
             <Field Label="Customer" DataField="CustomerName" />
             <Line />
-            <Iterator ItemReferenceName="i" DataField="Items">
+            <!--Iterator ItemReferenceName="i" DataField="Items">
                 <Row>
                     <Field Label="" DataField="i.PosNo" />
                     <Field Label="" DataField="i.ArticleId" />
@@ -26,7 +26,7 @@
                     <Field Label="" DataField="i.TAmount" />
                 </Row>
                 <line />
-            </Iterator>
+            </Iterator-->
             <line />
             <Field DataField="TotalAmount" />
             <Field DataField="TotalNetAmount" />

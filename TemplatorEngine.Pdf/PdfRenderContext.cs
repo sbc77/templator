@@ -14,7 +14,7 @@ namespace TemplatorEngine.Pdf
     {
         private readonly PrintTemplate template;
         //private readonly PdfDocument document;
-        private readonly List<Type> renderers = new List<Type>();
+        private readonly List<PdfElementRendererBase> renderers = new List<PdfElementRendererBase>();
 
         public PdfRenderContext(PrintTemplate template)
         {
@@ -24,7 +24,10 @@ namespace TemplatorEngine.Pdf
             // this.CurrentPosition = new Position(this.PageSettings.Margin.Value, this.PageSettings.Margin);
             this.IsDebug = template.IsDebug;
             
-            this.renderers.Add(typeof(PdfLabel));
+            this.renderers.Add(new PdfText());
+            
+            //this.renderers.Add(ElementType.Text, typeof(PdfLabel));
+            //this.renderers.Add(ElementType.Line, typeof(PdfLine));
             //this.renderers.Add(typeof(PdfImage));
             //this.renderers.Add(typeof(PdfBarcode));
             //this.renderers.Add(typeof(PdfField));
@@ -37,16 +40,15 @@ namespace TemplatorEngine.Pdf
         public bool IsDebug { get; }
         
         public PageSettings PageSettings { get; }
-        
+
         // public Position CurrentPosition { get; private set; }
 
-        public void RenderElement(PrintableElement element) //, IEnumerable<PropertyData> d = null)
+        public void RenderElement(PrintableElement element, PdfPage page) //, IEnumerable<PropertyData> d = null)
         {
 
             var renderer = this.GetRenderer(element);
 
-
-            renderer.GetType().GetMethod("Render").Invoke(renderer, new object[] {element, this});
+            renderer.Render(element,page);
         }
 
         /*public Position GetPosition(double width, double height)
@@ -78,32 +80,18 @@ namespace TemplatorEngine.Pdf
             return this.CurrentPage.Width - (this.PageSettings.Margin * 2);// - this.CurrentPosition.X;
         }*/
 
-        private object GetRenderer(PrintableElement element)
+        private PdfElementRendererBase GetRenderer(PrintableElement element)
         {
-            foreach (var type in this.renderers)
-            {
-                var renderer = (TypeInfo) type;
-                
-                var ii = renderer.BaseType;
-
-                if (ii.GenericTypeArguments.All(x => x != element.GetType()))
-                {
-                    continue;
-                }
-                
-                try
-                {
-                    return  Activator.CreateInstance(renderer) ;
-                }
-                catch (Exception e)
-                {
-                    throw e.InnerException;
-                }
-            }
+            var r = this.renderers.SingleOrDefault(x => x.ElementType == element.ElementType);
             
-            throw new Exception($"Cannot find PDF renderer for [{element.GetType().Name}]");
+            if (r == null)
+            {
+                throw new Exception($"Cannot find PDF renderer for [{element.GetType().Name}]");
+            }
+
+            return r;
         }
-        
+
         /*public void RequestNewPage()
         {
             this.ShowDebug("New page request");

@@ -15,6 +15,8 @@ namespace TemplatorEngine.Core.Model
         
         public object Value { get; set; }
         
-        public Type BaseType { get; set; }
+        public ElementType ElementType { get; set; }
+        
+        public string StyleName { get; set; }
     }
 }

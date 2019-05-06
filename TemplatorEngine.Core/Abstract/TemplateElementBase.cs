@@ -5,16 +5,28 @@ namespace TemplatorEngine.Core.Abstract
 {
     public abstract class TemplateElementBase
     {
-        [XmlElement(IsNullable = true)]
+        [XmlIgnore]
         public double? X { get; set; }
-
-        [XmlElement(IsNullable = true)]
+        
+        [XmlAttribute(AttributeName = "X")]
+        public string Xs {
+            get => (this.X.HasValue) ? this.X.ToString() : null;
+            set => this.X = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
+        } 
+        
+        [XmlIgnore]
         public double? Y { get; set; }
+        
+        [XmlAttribute(AttributeName = "Y")]
+        public string Ys {
+            get => (this.Y.HasValue) ? this.Y.ToString() : null;
+            set => this.Y = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
+        } 
 
-        [XmlElement(IsNullable = true)]
+        [XmlIgnore]
         public double? Width { get; set; }
 
-        [XmlElement(IsNullable = true)]
+        [XmlIgnore]
         public double? Height { get; set; }
         
         [XmlIgnore]

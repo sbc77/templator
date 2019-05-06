@@ -31,14 +31,33 @@ namespace TemplatorEngine.Core.Model
         [XmlAttribute]
         public double Height { get; set; }
 
-        [XmlElement(IsNullable = true)]
+        [XmlIgnore]
         public double? Margin { get; set; }
         
-        [XmlElement(IsNullable = true)]
+        [XmlAttribute("Margin")]
+        public string MarginStr {
+            get => (this.Margin.HasValue) ? this.Margin.ToString() : null;
+            set => this.Margin = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
+        }
+        
+        [XmlIgnore]
         public double? FontSize { get; set; }
         
-        [XmlElement(IsNullable = true)]
+        [XmlAttribute("FontSize")]
+        public string FontSizeStr {
+            get => (this.FontSize.HasValue) ? this.FontSize.ToString() : null;
+            set => this.FontSize = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
+        }
+        
+        [XmlIgnore]
         public double? Spacing { get; set; }
+
+        [XmlAttribute("Spacing")]
+        public string SpacingStr
+        {
+            get => (this.Spacing.HasValue) ? this.Spacing.ToString() : null;
+            set => this.Spacing = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
+        }
 
         public void Initialize()
         {
