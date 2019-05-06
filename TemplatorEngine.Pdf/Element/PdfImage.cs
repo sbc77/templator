@@ -5,7 +5,7 @@ using TemplatorEngine.Core.Element;
 
 namespace TemplatorEngine.Pdf.Element
 {
-    public class PdfImage : PdfElementRendererBase<Image>
+    /*public class PdfImage : PdfElementRendererBase<Image>
     {
         protected override void OnRender(Image element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
@@ -21,5 +21,5 @@ namespace TemplatorEngine.Pdf.Element
                 gfx.DrawImage(img, rect);
             }
         }
-    }
+    }*/
 }

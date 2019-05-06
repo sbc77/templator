@@ -1,22 +1,27 @@
-﻿using System.Collections.Generic;
-using TemplatorEngine.Core.Abstract;
+using System.Collections.Generic;
 
 namespace TemplatorEngine.Core.Model
 {
-    public interface IRenderContext<T>
+    public class RenderContext
     {
-        T CurrentPage { get; }
-
-        void RequestNewPage();
-
-        int PagesCount { get; }
-
-        PageSettings PageSettings { get; }
+        public RenderContext(PageSettings ps)
+        {
+            this.PageSettings = ps;
+            this.PrintableElements = new List<PrintableElement>();
+            this.CurrentX = ps.Margin ?? 5;
+            this.CurrentY = ps.Margin ?? 5;
+        }
+        public PageSettings PageSettings { get; set; }
         
-        Position CurrentPosition { get;  }
+        public List<PrintableElement> PrintableElements { get; private set; }
+        
+        public double CurrentX { get; set; }
+        
+        public double CurrentY { get; set; }
 
-        void RenderElement(TemplateElementBase element, IEnumerable<PropertyData> data = null);
-
-        Position GetPosition(double width, double height);
+        public void AddElement(PrintableElement pe)
+        {
+            this.PrintableElements.Add(pe);
+        }
     }
 }

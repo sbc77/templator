@@ -13,47 +13,43 @@ namespace TemplatorEngine.Pdf
     public class PdfRenderContext : IRenderContext<PdfPage>
     {
         private readonly PrintTemplate template;
-        private readonly PdfDocument document;
-        private readonly IEnumerable<PropertyData> data;
+        //private readonly PdfDocument document;
         private readonly List<Type> renderers = new List<Type>();
 
-        public PdfRenderContext(PrintTemplate template, PdfDocument document, IEnumerable<PropertyData> data)
+        public PdfRenderContext(PrintTemplate template)
         {
             this.template = template;
-            this.document = document;
-            this.data = data;
+            //this.document = document;
             this.PageSettings = this.template.PageSettings;
-            this.CurrentPosition = new Position(this.PageSettings.Margin, this.PageSettings.Margin);
+            // this.CurrentPosition = new Position(this.PageSettings.Margin.Value, this.PageSettings.Margin);
+            this.IsDebug = template.IsDebug;
             
             this.renderers.Add(typeof(PdfLabel));
-            this.renderers.Add(typeof(PdfImage));
-            this.renderers.Add(typeof(PdfBarcode));
-            this.renderers.Add(typeof(PdfField));
-            this.renderers.Add(typeof(PdfLine));
-            this.renderers.Add(typeof(PdfIterator));
+            //this.renderers.Add(typeof(PdfImage));
+            //this.renderers.Add(typeof(PdfBarcode));
+            //this.renderers.Add(typeof(PdfField));
+            //this.renderers.Add(typeof(PdfLine));
         }
-        public PdfPage CurrentPage { get; private set; }
+        // public PdfPage CurrentPage { get; private set; }
 
-        public int PagesCount { get; private set; }
+        // public int PagesCount { get; private set; }
+        
+        public bool IsDebug { get; }
         
         public PageSettings PageSettings { get; }
         
-        public Position CurrentPosition { get; private set; }
-        
-        public void RenderElement(TemplateElementBase element, IEnumerable<PropertyData> d = null)
+        // public Position CurrentPosition { get; private set; }
+
+        public void RenderElement(PrintableElement element) //, IEnumerable<PropertyData> d = null)
         {
+
             var renderer = this.GetRenderer(element);
 
-            if (d == null)
-            {
-                d = this.data;
-            }
 
-            this.ShowDebug($"Rendering element {element.GetType()}");
-            renderer.GetType().GetMethod("Render").Invoke(renderer, new object[] {element, d, this});
+            renderer.GetType().GetMethod("Render").Invoke(renderer, new object[] {element, this});
         }
 
-        public Position GetPosition(double width, double height)
+        /*public Position GetPosition(double width, double height)
         {
             if (this.CurrentPage == null )
             {
@@ -80,9 +76,9 @@ namespace TemplatorEngine.Pdf
             }
 
             return this.CurrentPage.Width - (this.PageSettings.Margin * 2);// - this.CurrentPosition.X;
-        }
+        }*/
 
-        private object GetRenderer(TemplateElementBase element)
+        private object GetRenderer(PrintableElement element)
         {
             foreach (var type in this.renderers)
             {
@@ -108,7 +104,7 @@ namespace TemplatorEngine.Pdf
             throw new Exception($"Cannot find PDF renderer for [{element.GetType().Name}]");
         }
         
-        public void RequestNewPage()
+        /*public void RequestNewPage()
         {
             this.ShowDebug("New page request");
             
@@ -149,7 +145,7 @@ namespace TemplatorEngine.Pdf
             page.Size = Enum.Parse<PageSize>(this.template.PageSettings.Format);
             
             this.ShowDebug("New page added");
-        }
+        }*/
 
         private static bool HasContent(PdfPage page)
         {
@@ -163,10 +159,10 @@ namespace TemplatorEngine.Pdf
             return false;
         }
 
-        private void ShowDebug(string message)
+        /*private void ShowDebug(string message)
         {
             var txt = $"{this.CurrentPosition} - {message}";
             Console.WriteLine(txt);
-        }
+        }*/
     }
 }

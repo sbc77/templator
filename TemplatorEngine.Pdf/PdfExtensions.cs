@@ -17,9 +17,14 @@ namespace TemplatorEngine.Pdf
             return new XPoint(pos.X , pos.Y );
         }
 
-        /*public static PropertyData GetPropertyData(this object data, string name)
+        public static XRect AsXRect(this PrintableElement item)
         {
-     
-        }*/
+            var x = XUnit.FromMillimeter(item.X).Point;
+            var y = XUnit.FromMillimeter(item.Y).Point;
+            var w = XUnit.FromMillimeter(item.Width).Point;
+            var h = XUnit.FromMillimeter(item.Height).Point;
+
+            return new XRect(x, y, w, h);
+        }
     }
 }

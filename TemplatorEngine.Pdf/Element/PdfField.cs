@@ -9,7 +9,7 @@ using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Pdf.Element
 {
-    public class PdfField : PdfElementRendererBase<Field>
+    /*public class PdfField : PdfElementRendererBase<Field>
     {
         private double lineHeight;
         private double lines;
@@ -67,7 +67,7 @@ namespace TemplatorEngine.Pdf.Element
         {
             gfx.DrawEllipse(XPens.Blue,p.X-1, p.Y-1, 2,2);
         }
-    }
+    }*/
 }
 
 

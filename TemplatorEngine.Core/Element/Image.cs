@@ -1,5 +1,6 @@
 ﻿using System.Xml.Serialization;
 using TemplatorEngine.Core.Abstract;
+using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Core.Element
 {
@@ -7,5 +8,11 @@ namespace TemplatorEngine.Core.Element
     {
         [XmlAttribute]
         public string Src { get; set; }
+        
+        public override bool IsLayout => false;
+        public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context)
+        {
+            throw new System.NotImplementedException();
+        }
     }
 }

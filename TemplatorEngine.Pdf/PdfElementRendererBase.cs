@@ -1,32 +1,17 @@
-﻿using System.Collections.Generic;
-using TemplatorEngine.Core.Abstract;
+﻿using PdfSharpCore.Pdf;
+using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Pdf
 {
-    public abstract class PdfElementRendererBase<T>: IPdfElementRenderer where T: TemplateElementBase
+    public abstract class PdfElementRendererBase :IPdfElementRenderer 
     {
-        /*public double X { get; set; }
-        public double Y { get; set; }
-        public double Width { get; set; }
-        public double Height { get; set; }
+        protected abstract void OnRender(PrintableElement element,  PdfPage context);
+        
 
-        public void Setup(T element, object data)
+        public void Render(PrintableElement element, PdfPage page)
         {
-            this.Width = element.Width;
-            this.Height = element.Height;
-            this.X = element.X;
-            this.Y = element.Y;
 
-            this.OnSetup(element, data);
-        }
-
-        public abstract void OnSetup(T element, object data);*/
-
-        protected abstract void OnRender(T element, IEnumerable<PropertyData> data, PdfRenderContext context);
-
-        public void Render(TemplateElementBase element, IEnumerable<PropertyData> data, PdfRenderContext context)
-        {
-            this.OnRender((T)element, data,context);
+            this.OnRender(element, page);
         }
     }
 }

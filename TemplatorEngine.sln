@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplatorEngine.Core", "Tem
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplatorEngineWebTest", "TemplatorEngineWebTest\TemplatorEngineWebTest.csproj", "{E856C836-3AC9-45D5-A16E-5795D2840840}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TemplatorEngineCore.Test", "TemplatorEngineCore.Test\TemplatorEngineCore.Test.csproj", "{621FC045-0269-4EAE-9E0D-0E56E6F5ABAD}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,5 +39,9 @@ Global
 		{E856C836-3AC9-45D5-A16E-5795D2840840}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E856C836-3AC9-45D5-A16E-5795D2840840}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E856C836-3AC9-45D5-A16E-5795D2840840}.Release|Any CPU.Build.0 = Release|Any CPU
+		{621FC045-0269-4EAE-9E0D-0E56E6F5ABAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{621FC045-0269-4EAE-9E0D-0E56E6F5ABAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{621FC045-0269-4EAE-9E0D-0E56E6F5ABAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{621FC045-0269-4EAE-9E0D-0E56E6F5ABAD}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal

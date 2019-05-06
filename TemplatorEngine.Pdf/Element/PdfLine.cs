@@ -6,7 +6,7 @@ using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Pdf.Element
 {
-    public class PdfLine : PdfElementRendererBase<Line>
+    /*public class PdfLine : PdfElementRendererBase<Line>
     {
         protected override void OnRender(Line element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
         {
@@ -29,5 +29,5 @@ namespace TemplatorEngine.Pdf.Element
                     //gfx.DrawRectangle(XPens.Black, rect);//pos1.AsXPoint(), pos2.AsXPoint());
             }
         }
-    }
+    }*/
 }

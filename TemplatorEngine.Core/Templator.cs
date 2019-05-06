@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -18,6 +19,7 @@ namespace TemplatorEngine.Core
 
         private Templator(string templateFilePath)
         {
+            // https://stackoverflow.com/questions/1295697/deserializing-empty-xml-attribute-value-into-nullable-int-property-using-xmlseri
             var xs = new XmlSerializer(typeof(PrintTemplate));
 
             using (var stream = File.OpenRead(templateFilePath))
@@ -29,9 +31,45 @@ namespace TemplatorEngine.Core
         public byte[] Render(object data)
         {
             this.PrintTemplate.PageSettings.Initialize();
+
+            var d = ConvertData(data).ToList();
+
+            var elements = this.PrintTemplate.GetPrintableElements(d);
+
+            var pages = this.GetPages(elements);
             
+            return this.renderer.Render(pages);
+        }
+
+        private IEnumerable<Page> GetPages(IList<PrintableElement> elements)
+        {
+            var pages = new List<Page>();
+
+            var pageCount = Math.Ceiling( elements.Max(x => x.Y + x.Height)/ this.PrintTemplate.PageSettings.Height);
+
+            var y = 0.0;
             
-            return this.renderer.Render(ConvertData(data));
+            for (var i = 1; i <= pageCount; i++)
+            {
+                pages.Add(new Page
+                {
+                    Elements = new List<PrintableElement>(),
+                    Height = this.PrintTemplate.PageSettings.Height,
+                    Width= this.PrintTemplate.PageSettings.Width,
+                    MinY = y,
+                    MaxY = y + this.PrintTemplate.PageSettings.Height
+                });
+
+                y += this.PrintTemplate.PageSettings.Height;
+            }
+
+            foreach (var element in elements)
+            {
+                var p = pages.Single(x => element.Y >= x.MinY && element.Y <= x.MinY);
+                p.Elements.Add(element);
+            }
+
+            return pages;
         }
 
         public void SetRenderer(ITemplateRenderer rend)

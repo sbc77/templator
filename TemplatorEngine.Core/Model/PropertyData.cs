@@ -1,4 +1,4 @@
-namespace TemplatorEngine.Core.Abstract
+namespace TemplatorEngine.Core.Model
 {
     public class PropertyData
     {

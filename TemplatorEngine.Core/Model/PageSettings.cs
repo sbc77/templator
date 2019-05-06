@@ -31,11 +31,14 @@ namespace TemplatorEngine.Core.Model
         [XmlAttribute]
         public double Height { get; set; }
 
-        [XmlAttribute]
-        public double Margin { get; set; }
+        [XmlElement(IsNullable = true)]
+        public double? Margin { get; set; }
         
-        [XmlAttribute]
-        public double FontSize { get; set; }
+        [XmlElement(IsNullable = true)]
+        public double? FontSize { get; set; }
+        
+        [XmlElement(IsNullable = true)]
+        public double? Spacing { get; set; }
 
         public void Initialize()
         {
@@ -52,6 +55,21 @@ namespace TemplatorEngine.Core.Model
             {
                 this.Width = d.Height;
                 this.Height = d.Width;
+            }
+
+            if (this.Spacing == null)
+            {
+                this.Spacing = 2;
+            }
+
+            if (this.FontSize == null)
+            {
+                this.FontSize = 12;
+            }
+
+            if (this.Margin == null)
+            {
+                this.Margin = 5;
             }
         }
     }

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace pdfCoreTest
+namespace pdfCoreTest.Model
 {
     public class Gs1Data
     {

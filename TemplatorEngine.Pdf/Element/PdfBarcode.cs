@@ -10,7 +10,7 @@ using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Pdf.Element
 {
-    public class PdfBarcode : PdfElementRendererBase<Barcode>
+    /*public class PdfBarcode : PdfElementRendererBase<Barcode>
     {
         private IBarcode gs1;
 
@@ -100,5 +100,5 @@ namespace TemplatorEngine.Pdf.Element
                 gfx.DrawString(barcodeStr, valueFont, XBrushes.Black, tPos.AsXPoint());
             }
         }
-    }
+    }*/
 }
