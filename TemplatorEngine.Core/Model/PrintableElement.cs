@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Xml.Serialization;
 
 namespace TemplatorEngine.Core.Model
@@ -17,6 +18,8 @@ namespace TemplatorEngine.Core.Model
         
         public ElementType ElementType { get; set; }
         
-        public string StyleName { get; set; }
+        // public string StyleName { get; set; }
+        
+        public IList<ElementStyle> Style { get; set; } 
     }
 }

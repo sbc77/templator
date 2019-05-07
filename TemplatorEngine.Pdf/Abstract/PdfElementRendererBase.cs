@@ -1,7 +1,7 @@
 ﻿using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Model;
 
-namespace TemplatorEngine.Pdf
+namespace TemplatorEngine.Pdf.Abstract
 {
     public abstract class PdfElementRendererBase :IPdfElementRenderer 
     {

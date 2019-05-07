@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Template IsDebug="true">
-    <PageSettings Format="A4" Orientation="Portrait" Margin="25" />
+<Template IsDebug="true" >
+    <PageSettings Format="A4" Orientation="Portrait" Margin="5" Spacing="0.5" />
     <!--PageHeader>
         <Column>
             <Label Text = "Invoice" Align="Center" />
@@ -11,25 +11,54 @@
         <Column>
             <Field Label="Invoice No" DataField="No" />
             <Field Label="Created" DataField="Created" />
-            <Field Label="Customer" DataField="CustomerName" />
             <Line />
-            <!--Iterator ItemReferenceName="i" DataField="Items">
+            
+            <Row>
+                <Column>
+                    <Label Text="Customer:" />
+                    <Line />
+                    <Field Label="Name" DataField="CustomerName" />
+                </Column>
+                <Column>
+                    <Label Text="Supplier:" />
+                    <Line />
+                    <Field Label="Name" DataField="SupplierName" />
+                </Column>
+            </Row>
+            
+            <Label Text="test"/>
+            
+            <Row>
+                <Label Width="5" Text="#"  />
+                <Label Width="20" Text="ArticleId" />
+                <Label Text="Description" />
+                <Label Width="10" Text="UoM" />
+                <Label Width="10" Text="Qty" />
+                <Label Width="10" Text="Tax" />
+                <Label Width="15" Text="Net" />
+                <Label Width="15" Text="Tax" />
+                <Label Width="15" Text="Gross" />
+            </Row>
+            <Line />
+            
+            <Iterator ItemReferenceName="i" DataField="Items">
                 <Row>
-                    <Field Label="" DataField="i.PosNo" />
-                    <Field Label="" DataField="i.ArticleId" />
-                    <Field Label="" DataField="i.ArticleDescription" />
-                    <Field Label="" DataField="i.UoM" />
-                    <Field Label="" DataField="i.Quantity" />
-                    <Field Label="" DataField="i.TaxId" />
-                    <Field Label="" DataField="i.NetAmount" />
-                    <Field Label="" DataField="i.TaxAmount" />
-                    <Field Label="" DataField="i.TAmount" />
+                    <Value Width="5" DataField="i.PosNo"  Align="Center" />
+                    <Value Width="20" DataField="i.ArticleId" />
+                    <Value DataField="i.ArticleDescription" />
+                    <Value Width="10" DataField="i.UoM" />
+                    <Value Width="10" Style="Quantity" DataField="i.Quantity" />
+                    <Value Width="10" Align="Center" DataField="i.TaxId" />
+                    <Value Width="15" Style="Money" DataField="i.NetAmount" />
+                    <Value Width="15" Style="Money" DataField="i.TaxAmount" />
+                    <Value Width="15" Style="Money" DataField="i.Amount" />
                 </Row>
                 <line />
-            </Iterator-->
+            </Iterator>
             <line />
             <Field DataField="TotalAmount" />
             <Field DataField="TotalNetAmount" />
+        
         </Column>
     </ReportBody>
 </Template>

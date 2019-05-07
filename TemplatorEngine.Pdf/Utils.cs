@@ -17,4 +17,6 @@ namespace TemplatorEngine.Pdf
             return result > 0 ? result : defaultValue;
         }
     }
+    
+    
 }

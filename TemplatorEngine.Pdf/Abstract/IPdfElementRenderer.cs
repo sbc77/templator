@@ -1,9 +1,7 @@
-﻿using System.Collections.Generic;
-using PdfSharpCore.Pdf;
-using TemplatorEngine.Core.Abstract;
+﻿using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Model;
 
-namespace TemplatorEngine.Pdf
+namespace TemplatorEngine.Pdf.Abstract
 {
     public interface IPdfElementRenderer 
     {

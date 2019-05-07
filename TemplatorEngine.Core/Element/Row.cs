@@ -12,6 +12,7 @@ namespace TemplatorEngine.Core.Element
         [XmlElement(Type = typeof(Field)),
         XmlElement(Type = typeof(Line)),
         XmlElement(Type = typeof(Label)),
+        XmlElement(Type = typeof(Value)),
         XmlElement(Type = typeof(Image)),
         XmlElement(Type = typeof(Barcode)),
         XmlElement(Type = typeof(Iterator)),
@@ -22,18 +23,18 @@ namespace TemplatorEngine.Core.Element
         public override bool IsLayout => true;
         
         public bool KeepTogether { get; set; }
-        public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context)
+        public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {
             var ps = context.PageSettings;
             
             if (this.Height == null)
             {
-                this.Height = maxHeight ?? ps.Height - ps.Margin * 2;
+                this.Height = maxHeight ?? context.MaxPageHeight;
             }
 
             if (maxWidth == null)
             {
-                maxWidth = ps.Width;
+                maxWidth = context.MaxPageWidth;
             }
 
             if (this.Width != null)
@@ -42,27 +43,32 @@ namespace TemplatorEngine.Core.Element
             }
 
             var totalFixedWidth = this.Items.Where(x => x.Width != null).Sum(s => s.Width+ps.Spacing);
-            var restWithToSplit = maxWidth - totalFixedWidth;
+            var restWithToSplit = maxWidth - totalFixedWidth+ps.Spacing;
             var autoWithItemsCount = this.Items.Count(x => x.Width == null);
-            var autoSizedSegmentWidth = restWithToSplit / autoWithItemsCount - ps.Spacing;
+            var autoSizedSegmentWidth = restWithToSplit / autoWithItemsCount - ps.Spacing.Value;
 
+            
+            // var currentX = context.CurrentX;
             var currentY = context.CurrentY;
-
             foreach (var item in this.Items)
             {
-                context.CurrentY = currentY;
+                
                 
                 if (item.Width == null)
                 {
                     item.Width = autoSizedSegmentWidth;
                 }
                 
-                item.Initialize(item.Width, this.Height,context);
+                item.Initialize(item.Width, this.Height,context, data);
 
                 context.CurrentX += item.Width.Value + ps.Spacing.Value;
                 
                 this.Width += item.Width + ps.Spacing;
+                
+                context.CurrentY = currentY;
             }
+
+            this.Height = this.Items.Max(x => x.Height);
         }
     }
 }

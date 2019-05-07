@@ -45,14 +45,14 @@ namespace TemplatorEngine.Pdf
 
                 foreach (var element in page.Elements)
                 {
-                    ctx.RenderElement(element);
+                    ctx.Render(element, pdfPage);
                 }
             }
 
 
             Debug.WriteLine("Saving to PDF file");
 
-            using (MemoryStream stream = new MemoryStream())
+            using (var stream = new MemoryStream())
             {
                 document.Save(stream, true);
                 return stream.ToArray();

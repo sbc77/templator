@@ -1,33 +1,25 @@
 ﻿using System.Collections.Generic;
 using PdfSharpCore.Drawing;
+using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
+using TemplatorEngine.Pdf.Abstract;
 
 namespace TemplatorEngine.Pdf.Element
 {
-    /*public class PdfLine : PdfElementRendererBase<Line>
+    public class PdfLine : PdfElementRendererBase
     {
-        protected override void OnRender(Line element, IEnumerable<PropertyData> data, PdfRenderContext ctx)
+        protected override void OnRender(PrintableElement element, PdfPage page)
         {
-            if (element.Height <= 0)
+            using (var gfx = XGraphics.FromPdfPage(page))
             {
-                element.Height = 10;
-            }
-            
-            var pos = ctx.GetPosition(0, element.Height);
-            
-            using (var gfx = XGraphics.FromPdfPage(ctx.CurrentPage))
-            {
-                
-                var pos1 = new Position(pos.X, pos.Y + element.Height / 2); // in the middle of requested height
-                var pos2 = new Position(gfx.PdfPage.Width - ctx.PageSettings.Margin, pos1.Y);
-                
-                //var rect = new XRect(pos1.AsXPoint(),pos2.AsXPoint());
+                var rect = element.AsXRect();
 
-                gfx.DrawLine(XPens.Black, pos1.AsXPoint(),pos2.AsXPoint());
-                    //gfx.DrawRectangle(XPens.Black, rect);//pos1.AsXPoint(), pos2.AsXPoint());
+                gfx.DrawLine(XPens.Black, rect.Left, rect.Center.Y, rect.Right, rect.Center.Y);
             }
         }
-    }*/
+
+        public override ElementType ElementType => ElementType.Line;
+    }
 }

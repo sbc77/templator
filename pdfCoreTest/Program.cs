@@ -113,8 +113,9 @@ namespace pdfCoreTest
             return new Invoice
             {
                 Created = DateTime.Now,
-                InvoiceNo = "INV/2019/000321",
+                No = "INV/2019/000321",
                 CustomerName = "Apfel GmbH",
+                SupplierName = "Biella AG",
                 Items = items,
                 TotalAmount = items.Sum(x=>x.Amount),
                 TotalNetAmount = items.Sum(x=>x.NetAmount)

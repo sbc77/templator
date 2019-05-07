@@ -15,6 +15,12 @@ namespace TemplatorEngine.Core.Model
         
         public List<PrintableElement> PrintableElements { get; private set; }
         
+        public double FontSizeHeightRatio => .4;
+
+        public double MaxPageWidth => this.PageSettings.Width - this.PageSettings.Margin.Value * 2;
+        
+        public double MaxPageHeight => this.PageSettings.Height - this.PageSettings.Margin.Value * 2;
+        
         public double CurrentX { get; set; }
         
         public double CurrentY { get; set; }

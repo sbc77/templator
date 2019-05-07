@@ -15,6 +15,7 @@ namespace TemplatorEngine.Core.Element
         [XmlElement(Type = typeof(Field)),
         XmlElement(Type = typeof(Line)),
         XmlElement(Type = typeof(Label)),
+        XmlElement(Type = typeof(Value)),
         XmlElement(Type = typeof(Image)),
         XmlElement(Type = typeof(Barcode)),
         XmlElement(Type = typeof(Iterator)),
@@ -26,11 +27,11 @@ namespace TemplatorEngine.Core.Element
         
         public override bool IsLayout => true;
         
-        public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context)
+        public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {
             if (this.Width == null)
             {
-                this.Width = maxWidth ?? context.PageSettings.Width - context.PageSettings.Margin * 2;
+                this.Width = maxWidth ?? context.MaxPageWidth;
             }
 
             if (this.Height != null)
@@ -38,17 +39,23 @@ namespace TemplatorEngine.Core.Element
                 throw new Exception("Height of element Column is calculated automatically - cannot be set in XML");
             }
 
+            this.Height = 0;
+
             var currentX = context.CurrentX;
             
             foreach (var item in this.Items)
             {
                 context.CurrentX = currentX;
-                item.Initialize(this.Width, item.Height-context.PageSettings.Spacing, context);
+                
+                item.Initialize(this.Width, item.Height-context.PageSettings.Spacing, context,  data);
                 
                 context.CurrentY += item.Height.Value + context.PageSettings.Spacing.Value;
 
-                this.Height += item.Height + context.PageSettings.Spacing;
+                this.Height += item.Height+ context.PageSettings.Spacing;
             }
+
+            this.Height -= context.PageSettings.Spacing;
+            context.CurrentX = currentX;
         }
     }
 }

@@ -1,4 +1,4 @@
-﻿using System.Reflection.Metadata;
+﻿using System.Collections.Generic;
 using System.Xml.Serialization;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Model;
@@ -23,8 +23,13 @@ namespace TemplatorEngine.Core.Element
         public string Align { get; set; }
         
         public override bool IsLayout => false;
-        public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context)
+        public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {
+            if (string.IsNullOrWhiteSpace(this.Text))
+            {
+                return;
+            }
+            
             if (this.FontSize == null)
             {
                 this.FontSize = context.PageSettings.FontSize;
@@ -32,12 +37,12 @@ namespace TemplatorEngine.Core.Element
 
             if (this.Width == null)
             {
-                this.Width = maxWidth ?? context.PageSettings.Width;
+                this.Width = maxWidth ?? context.MaxPageWidth;
             }
 
             if (this.Height == null)
             {
-                this.Height = 20;
+                this.Height = this.FontSize * context.FontSizeHeightRatio;
             }
             
             if (this.Align == null)
@@ -48,6 +53,7 @@ namespace TemplatorEngine.Core.Element
             var pe = new PrintableElement
             {
                 ElementType = ElementType.Text,
+                // StyleName = "Label",
                 Height = this.Height.Value,
                 Width = this.Width.Value,
                 X = context.CurrentX,

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Xml.Serialization;
@@ -7,12 +7,9 @@ using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Core.Element
 {
-
-    public class Field : TemplateElementBase
+    public class Value : TemplateElementBase
     {
         [XmlAttribute] public string DataField { get; set; }
-
-        [XmlAttribute] public string Label { get; set; }
 
         [XmlAttribute] public int Lines { get; set; }
 
@@ -23,38 +20,31 @@ namespace TemplatorEngine.Core.Element
             get => (this.FontSize.HasValue) ? this.FontSize.ToString() : null;
             set => this.FontSize = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
         }
-
-        [XmlIgnore] public double? LabelWidth { get; set; }
-
-        [XmlAttribute(AttributeName = "LabelWidth")]
-        public string LabelWidthStr
-        {
-            get => (this.LabelWidth.HasValue) ? this.LabelWidth.ToString() : null;
-            set => this.LabelWidth = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
-        }
-
-        [XmlAttribute] public string LabelAlign { get; set; }
-
-        [XmlAttribute] public string ValueAlign { get; set; }
+        
+        [XmlAttribute] public string Align { get; set; }
 
         public override bool IsLayout => false;
 
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context,
             IList<PropertyData> data)
         {
+            var styles = new List<ElementStyle>();
             var dataItem = data.SingleOrDefault(x => x.Name == this.DataField);
 
             if (dataItem == null)
             {
                 throw new Exception($"Cannot find data for property: {this.DataField}");
             }
-
-            var labelToDisplay = this.Label ?? dataItem.Label;
+            
             var valueToDisplay = dataItem.Value;
 
             if (this.FontSize == null)
             {
                 this.FontSize = context.PageSettings.FontSize;
+            }
+            else
+            {
+                styles.Add(new ElementStyle( StyleAttribute.FontSize,this.FontSize));
             }
 
             if (this.Width == null)
@@ -67,33 +57,13 @@ namespace TemplatorEngine.Core.Element
                 this.Height = this.FontSize * context.FontSizeHeightRatio;
             }
 
-            if (this.ValueAlign == null)
+            if (this.Align == null)
             {
-                this.ValueAlign = "Left";
+                this.Align = "Left";
             }
-
-            if (this.LabelAlign == null)
+            else
             {
-                this.LabelAlign = "Left";
-            }
-
-            if (this.LabelWidth == null)
-            {
-                this.LabelWidth = this.Width>60 ? 30 : this.Width/2;
-            }
-
-            if (!string.IsNullOrEmpty(labelToDisplay))
-            {
-                context.AddElement(new PrintableElement
-                {
-                    ElementType = ElementType.Text,
-                    // StyleName = "Label",
-                    Height = this.Height.Value,
-                    Width = this.LabelWidth.Value,
-                    X = context.CurrentX,
-                    Y = context.CurrentY,
-                    Value = labelToDisplay
-                });
+                styles.Add(new ElementStyle( StyleAttribute.Align,this.Align));
             }
 
             if (valueToDisplay != null)
@@ -101,12 +71,13 @@ namespace TemplatorEngine.Core.Element
                 context.AddElement(new PrintableElement
                 {
                     ElementType = ElementType.Text,
-                    // StyleName = "Value",
+                    // StyleName = this.Style ?? "Value",
                     Height = this.Height.Value,
-                    Width = this.Width.Value - LabelWidth.Value,
-                    X = context.CurrentX + this.LabelWidth.Value,
+                    Width = this.Width.Value,
+                    X = context.CurrentX,
                     Y = context.CurrentY,
-                    Value = valueToDisplay
+                    Value = valueToDisplay,
+                    Style = styles
                 });
             }
         }

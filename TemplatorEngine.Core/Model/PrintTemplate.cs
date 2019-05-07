@@ -8,6 +8,7 @@ namespace TemplatorEngine.Core.Model
     [XmlRoot(ElementName = "Template")]
     public class PrintTemplate
     {
+        [XmlAttribute]
         public bool IsDebug { get; set; }
         
         public PageSettings PageSettings { get; set; }
@@ -16,6 +17,7 @@ namespace TemplatorEngine.Core.Model
         [XmlArrayItem(Type = typeof(Field))]
         [XmlArrayItem(Type = typeof(Line))]
         [XmlArrayItem(Type = typeof(Label))]
+        [XmlArrayItem(Type = typeof(Value))]
         [XmlArrayItem(Type = typeof(Image))]
         [XmlArrayItem(Type = typeof(Barcode))]
         [XmlArrayItem(Type = typeof(Row))]
@@ -27,6 +29,7 @@ namespace TemplatorEngine.Core.Model
         [XmlArrayItem(Type = typeof(Field))]
         [XmlArrayItem(Type = typeof(Line))]
         [XmlArrayItem(Type = typeof(Label))]
+        [XmlArrayItem(Type = typeof(Value))]
         [XmlArrayItem(Type = typeof(Image))]
         [XmlArrayItem(Type = typeof(Barcode))]
         [XmlArrayItem(Type = typeof(Iterator))]
@@ -39,13 +42,14 @@ namespace TemplatorEngine.Core.Model
         [XmlArrayItem(Type = typeof(Field))]
         [XmlArrayItem(Type = typeof(Line))]
         [XmlArrayItem(Type = typeof(Label))]
+        [XmlArrayItem(Type = typeof(Value))]
         [XmlArrayItem(Type = typeof(PageNofM))]
         [XmlArrayItem(Type = typeof(Barcode))]
         [XmlArrayItem(Type = typeof(Row))]
         [XmlArrayItem(Type = typeof(Column))]
         public List<TemplateElementBase> PageFooter { get; set; }
 
-        public IList<PrintableElement> GetPrintableElements(IEnumerable<PropertyData> data)
+        public IList<PrintableElement> GetPrintableElements(IList<PropertyData> data)
         {
 
             var context = new RenderContext(this.PageSettings);
@@ -58,7 +62,9 @@ namespace TemplatorEngine.Core.Model
             
             foreach (var item in this.ReportBody)
             {
-                item.Initialize(this.PageSettings.Width, this.PageSettings.Height, context);
+                var maxWidth = this.PageSettings.Width - this.PageSettings.Margin*2;
+                var maxHeight = this.PageSettings.Height - this.PageSettings.Margin*2;
+                item.Initialize(maxWidth,maxHeight, context, data);
             }
             
             /*foreach (var item in this.PageFooter)

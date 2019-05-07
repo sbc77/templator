@@ -19,7 +19,6 @@ namespace TemplatorEngine.Core
 
         private Templator(string templateFilePath)
         {
-            // https://stackoverflow.com/questions/1295697/deserializing-empty-xml-attribute-value-into-nullable-int-property-using-xmlseri
             var xs = new XmlSerializer(typeof(PrintTemplate));
 
             using (var stream = File.OpenRead(templateFilePath))

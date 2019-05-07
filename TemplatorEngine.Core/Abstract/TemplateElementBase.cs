@@ -1,4 +1,6 @@
-﻿using System.Xml.Serialization;
+﻿using System;
+using System.Collections.Generic;
+using System.Xml.Serialization;
 using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Core.Abstract
@@ -25,13 +27,27 @@ namespace TemplatorEngine.Core.Abstract
 
         [XmlIgnore]
         public double? Width { get; set; }
+        
+        [XmlAttribute(AttributeName = "Width")]
+        public string WidthS {
+            get => (this.Width.HasValue) ? this.Width.ToString() : null;
+            set => this.Width = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
+        }
 
         [XmlIgnore]
         public double? Height { get; set; }
         
+        [XmlAttribute(AttributeName = "Height")]
+        public string HeightS {
+            get => (this.Height.HasValue) ? this.Height.ToString() : null;
+            set => this.Height = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
+        }
+        
         [XmlIgnore]
         public abstract bool IsLayout { get; }
+        
+        // [XmlAttribute] public string Style { get; set; }
 
-        public abstract void Initialize(double? maxWidth, double? maxHeight, RenderContext ctx);
+        public abstract void Initialize(double? maxWidth, double? maxHeight, RenderContext ctx, IList<PropertyData>  data);
     }
 }
