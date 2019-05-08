@@ -46,8 +46,8 @@ namespace TemplatorEngine.Core
 
             var pageCount = Math.Ceiling( elements.Max(x => x.Y + x.Height)/ this.PrintTemplate.PageSettings.Height);
 
-            var y = 0.0;
-            
+            var y = this.PrintTemplate.PageSettings.Margin.Value;
+
             for (var i = 1; i <= pageCount; i++)
             {
                 pages.Add(new Page
@@ -56,15 +56,17 @@ namespace TemplatorEngine.Core
                     Height = this.PrintTemplate.PageSettings.Height,
                     Width= this.PrintTemplate.PageSettings.Width,
                     MinY = y,
-                    MaxY = y + this.PrintTemplate.PageSettings.Height
+                    MaxY = y + this.PrintTemplate.PageSettings.Height-this.PrintTemplate.PageSettings.Margin.Value*2
                 });
 
-                y += this.PrintTemplate.PageSettings.Height;
+                y += this.PrintTemplate.PageSettings.Height - this.PrintTemplate.PageSettings.Margin.Value*2;
             }
 
             foreach (var element in elements)
             {
-                var p = pages.Single(x => element.Y >= x.MinY && element.Y <= x.MaxY);
+                var p = pages.Single(x => element.Y+element.Height >= x.MinY && element.Y+element.Height < x.MaxY);
+
+                element.Y -= p.MinY - this.PrintTemplate.PageSettings.Margin.Value; // restart Y from 0;
                 p.Elements.Add(element);
             }
 

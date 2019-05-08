@@ -7,7 +7,7 @@ namespace TemplatorEngine.Core.Element
 {
     public class Line : TemplateElementBase
     {
-        public override bool IsLayout => false;
+        // public override bool IsLayout => false;
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {
             if (this.Height == null)

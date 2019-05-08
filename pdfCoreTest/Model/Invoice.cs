@@ -14,5 +14,6 @@ namespace pdfCoreTest.Model
         public decimal TotalAmount { get; set; } 
         public decimal TotalNetAmount { get; set; }
         public string SupplierName { get; set; }
+        public string Barcode { get; set; }
     }
 }

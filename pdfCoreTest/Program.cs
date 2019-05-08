@@ -12,7 +12,7 @@ namespace pdfCoreTest
     {
         static void Main(string[] args)
         {
-           // GenerateLabel();
+           //GenerateLabel();
            GenerateInvoice();
         }
 
@@ -93,7 +93,7 @@ namespace pdfCoreTest
         {
             var items = new List<InvoiceItem>();
 
-            for (var i = 1; i <= 10; i++)
+            for (var i = 1; i <= 50; i++)
             {
                 items.Add(new InvoiceItem
                 {
@@ -114,6 +114,7 @@ namespace pdfCoreTest
             {
                 Created = DateTime.Now,
                 No = "INV/2019/000321",
+                Barcode = "(00)376113650002691578",
                 CustomerName = "Apfel GmbH",
                 SupplierName = "Biella AG",
                 Items = items,

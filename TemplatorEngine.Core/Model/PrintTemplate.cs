@@ -16,18 +16,7 @@ namespace TemplatorEngine.Core.Model
         [XmlArray]
         [XmlArrayItem(Type = typeof(Field))]
         [XmlArrayItem(Type = typeof(Line))]
-        [XmlArrayItem(Type = typeof(Label))]
-        [XmlArrayItem(Type = typeof(Value))]
-        [XmlArrayItem(Type = typeof(Image))]
-        [XmlArrayItem(Type = typeof(Barcode))]
-        [XmlArrayItem(Type = typeof(Row))]
-        [XmlArrayItem(Type = typeof(Column))]
-        public List<TemplateElementBase> PageHeader { get; set; }
-
-
-        [XmlArray]
-        [XmlArrayItem(Type = typeof(Field))]
-        [XmlArrayItem(Type = typeof(Line))]
+        [XmlArrayItem(Type = typeof(Space))]
         [XmlArrayItem(Type = typeof(Label))]
         [XmlArrayItem(Type = typeof(Value))]
         [XmlArrayItem(Type = typeof(Image))]
@@ -36,29 +25,10 @@ namespace TemplatorEngine.Core.Model
         [XmlArrayItem(Type = typeof(Row))]
         [XmlArrayItem(Type = typeof(Column))]
         public List<TemplateElementBase> ReportBody { get; set; }
-
         
-        [XmlArray]
-        [XmlArrayItem(Type = typeof(Field))]
-        [XmlArrayItem(Type = typeof(Line))]
-        [XmlArrayItem(Type = typeof(Label))]
-        [XmlArrayItem(Type = typeof(Value))]
-        [XmlArrayItem(Type = typeof(PageNofM))]
-        [XmlArrayItem(Type = typeof(Barcode))]
-        [XmlArrayItem(Type = typeof(Row))]
-        [XmlArrayItem(Type = typeof(Column))]
-        public List<TemplateElementBase> PageFooter { get; set; }
-
         public IList<PrintableElement> GetPrintableElements(IList<PropertyData> data)
         {
-
             var context = new RenderContext(this.PageSettings);
-
-            /*foreach (var item in this.PageHeader)
-            {
-                item.CalculateDimensions(this.PageSettings.Width, this.PageSettings.Height, this.PageSettings);
-            }*/
-            
             
             foreach (var item in this.ReportBody)
             {
@@ -66,11 +36,6 @@ namespace TemplatorEngine.Core.Model
                 var maxHeight = this.PageSettings.Height - this.PageSettings.Margin*2;
                 item.Initialize(maxWidth,maxHeight, context, data);
             }
-            
-            /*foreach (var item in this.PageFooter)
-            {
-                item.CalculateDimensions(this.PageSettings.Width, this.PageSettings.Height, this.PageSettings);
-            }*/
 
             return context.PrintableElements;
         }

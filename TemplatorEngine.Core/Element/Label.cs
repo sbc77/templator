@@ -20,11 +20,21 @@ namespace TemplatorEngine.Core.Element
         }
         
         [XmlAttribute]
+        public int Rotate { get; set; }
+        
+        [XmlAttribute]
         public string Align { get; set; }
         
-        public override bool IsLayout => false;
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {
+            var pe = new PrintableElement
+            {
+                ElementType = ElementType.Text,
+                X = context.CurrentX,
+                Y = context.CurrentY,
+                Value = this.Text
+            };
+            
             if (string.IsNullOrWhiteSpace(this.Text))
             {
                 return;
@@ -33,6 +43,10 @@ namespace TemplatorEngine.Core.Element
             if (this.FontSize == null)
             {
                 this.FontSize = context.PageSettings.FontSize;
+            }
+            else
+            {
+                pe.AddProperty(PrintableElementProperty.FontSize,this.FontSize);
             }
 
             if (this.Width == null)
@@ -49,17 +63,18 @@ namespace TemplatorEngine.Core.Element
             {
                 this.Align = "Left";
             }
-
-            var pe = new PrintableElement
+            else
             {
-                ElementType = ElementType.Text,
-                // StyleName = "Label",
-                Height = this.Height.Value,
-                Width = this.Width.Value,
-                X = context.CurrentX,
-                Y = context.CurrentY,
-                Value = this.Text
-            };
+                pe.AddProperty(PrintableElementProperty.Align, this.Align);
+            }
+            
+            if (this.Rotate != 0)
+            {
+                pe.AddProperty(PrintableElementProperty.Rotate,this.Rotate);
+            }
+
+            pe.Height = this.Height.Value;
+            pe.Width = this.Width.Value;
 
             context.AddElement(pe);
         }

@@ -11,9 +11,9 @@ namespace TemplatorEngine.Core.Model
             this.CurrentX = ps.Margin ?? 5;
             this.CurrentY = ps.Margin ?? 5;
         }
-        public PageSettings PageSettings { get; set; }
+        public PageSettings PageSettings { get; }
         
-        public List<PrintableElement> PrintableElements { get; private set; }
+        public List<PrintableElement> PrintableElements { get; }
         
         public double FontSizeHeightRatio => .4;
 

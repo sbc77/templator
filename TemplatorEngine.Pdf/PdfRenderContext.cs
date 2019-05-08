@@ -20,20 +20,14 @@ namespace TemplatorEngine.Pdf
 
         public PdfRenderContext(PrintTemplate template)
         {
-            //this.document = document;
-            
             this.PageSettings = template.PageSettings;
             this.Template = template;
             this.IsDebug = template.IsDebug;
             
             this.renderers.Add(new PdfText());
             this.renderers.Add(new PdfLine());
-
-            //this.renderers.Add(ElementType.Text, typeof(PdfLabel));
-            //this.renderers.Add(ElementType.Line, typeof(PdfLine));
-            //this.renderers.Add(typeof(PdfImage));
-            //this.renderers.Add(typeof(PdfBarcode));
-            //this.renderers.Add(typeof(PdfField));
+            this.renderers.Add(new PdfImage());
+            this.renderers.Add(new PdfRect());
         }
 
         public PrintTemplate Template { get; }
@@ -68,14 +62,14 @@ namespace TemplatorEngine.Pdf
 
         public void Render(PrintableElement element, PdfPage page)
         {
+            var renderer = this.GetRenderer(element);
+
+            renderer.Render(element,page);
+            
             if (this.Template.IsDebug)
             {
                 this.RenderDebug(element,page);
             }
-            
-            var renderer = this.GetRenderer(element);
-
-            renderer.Render(element,page);
         }
 
         private void RenderDebug(PrintableElement element, PdfPage page)
@@ -87,10 +81,13 @@ namespace TemplatorEngine.Pdf
                 gfx.DrawRectangle(XPens.Silver, rect);
                 
                 var font = new XFont("Arial Narrow", 4, XFontStyle.Regular);
-                
                 var tf = new XTextFormatter(gfx) {Alignment = XParagraphAlignment.Right};
-
-                tf.DrawString($"{element.ElementType} ({XUnit.FromPoint(rect.X).Millimeter:F0},{XUnit.FromPoint(rect.Y).Millimeter:F0})", font, XBrushes.Navy, element.AsXRect());
+                var width = rect.Width > 18 ?   18: 9;
+                var height = rect.Width > 18 ? 5 : 10;
+                var dbgStr =$"{element.ElementType} ({XUnit.FromPoint(rect.X).Millimeter:F0},{XUnit.FromPoint(rect.Y).Millimeter:F0})";
+                
+                gfx.DrawRectangle(new XSolidBrush(XColor.FromArgb(128+64,240,240,240)), rect.TopRight.X - width, rect.Y, width, height);
+                tf.DrawString(dbgStr, font, XBrushes.Navy, element.AsXRect());
             }
         }
     }

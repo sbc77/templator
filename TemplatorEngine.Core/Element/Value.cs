@@ -22,13 +22,13 @@ namespace TemplatorEngine.Core.Element
         }
         
         [XmlAttribute] public string Align { get; set; }
-
-        public override bool IsLayout => false;
+        
+        [XmlAttribute]
+        public int Precision { get; set; }
 
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context,
             IList<PropertyData> data)
         {
-            var styles = new List<ElementStyle>();
             var dataItem = data.SingleOrDefault(x => x.Name == this.DataField);
 
             if (dataItem == null)
@@ -38,13 +38,21 @@ namespace TemplatorEngine.Core.Element
             
             var valueToDisplay = dataItem.Value;
 
+            var pe = new PrintableElement
+            {
+                ElementType = ElementType.Text,
+                X = context.CurrentX,
+                Y = context.CurrentY,
+                Value = valueToDisplay,
+            };
+
             if (this.FontSize == null)
             {
                 this.FontSize = context.PageSettings.FontSize;
             }
             else
             {
-                styles.Add(new ElementStyle( StyleAttribute.FontSize,this.FontSize));
+                pe.AddProperty(PrintableElementProperty.FontSize,this.FontSize);
             }
 
             if (this.Width == null)
@@ -63,22 +71,20 @@ namespace TemplatorEngine.Core.Element
             }
             else
             {
-                styles.Add(new ElementStyle( StyleAttribute.Align,this.Align));
+                pe.AddProperty(PrintableElementProperty.Align, this.Align);
             }
+
+            if (this.Precision > 0)
+            {
+                pe.AddProperty(PrintableElementProperty.Precision, this.Precision);
+            }
+
+            pe.Height = this.Height.Value;
+            pe.Width = this.Width.Value;
 
             if (valueToDisplay != null)
             {
-                context.AddElement(new PrintableElement
-                {
-                    ElementType = ElementType.Text,
-                    // StyleName = this.Style ?? "Value",
-                    Height = this.Height.Value,
-                    Width = this.Width.Value,
-                    X = context.CurrentX,
-                    Y = context.CurrentY,
-                    Value = valueToDisplay,
-                    Style = styles
-                });
+                context.AddElement(pe);
             }
         }
     }

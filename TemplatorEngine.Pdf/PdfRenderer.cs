@@ -24,8 +24,6 @@ namespace TemplatorEngine.Pdf
 
         public byte[] Render(IEnumerable<Page> pages)
         {
-            Debug.WriteLine("Rendering started");
-
             if (!fontResolverAssigned)
             {
                 GlobalFontSettings.FontResolver = new FontResolver(this.cfg.FontPaths);
@@ -48,9 +46,6 @@ namespace TemplatorEngine.Pdf
                     ctx.Render(element, pdfPage);
                 }
             }
-
-
-            Debug.WriteLine("Saving to PDF file");
 
             using (var stream = new MemoryStream())
             {

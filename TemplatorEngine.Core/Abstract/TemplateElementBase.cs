@@ -42,11 +42,6 @@ namespace TemplatorEngine.Core.Abstract
             get => (this.Height.HasValue) ? this.Height.ToString() : null;
             set => this.Height = !string.IsNullOrEmpty(value) ? double.Parse(value) : default(double?);
         }
-        
-        [XmlIgnore]
-        public abstract bool IsLayout { get; }
-        
-        // [XmlAttribute] public string Style { get; set; }
 
         public abstract void Initialize(double? maxWidth, double? maxHeight, RenderContext ctx, IList<PropertyData>  data);
     }

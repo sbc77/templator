@@ -34,10 +34,12 @@ namespace TemplatorEngine.Core.Element
         }
 
         [XmlAttribute] public string LabelAlign { get; set; }
+        
+        [XmlAttribute]
+        public int Precision { get; set; }
 
         [XmlAttribute] public string ValueAlign { get; set; }
-
-        public override bool IsLayout => false;
+        
 
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context,
             IList<PropertyData> data)
@@ -87,7 +89,6 @@ namespace TemplatorEngine.Core.Element
                 context.AddElement(new PrintableElement
                 {
                     ElementType = ElementType.Text,
-                    // StyleName = "Label",
                     Height = this.Height.Value,
                     Width = this.LabelWidth.Value,
                     X = context.CurrentX,
@@ -98,16 +99,24 @@ namespace TemplatorEngine.Core.Element
 
             if (valueToDisplay != null)
             {
-                context.AddElement(new PrintableElement
+                var v = new PrintableElement
                 {
                     ElementType = ElementType.Text,
-                    // StyleName = "Value",
                     Height = this.Height.Value,
                     Width = this.Width.Value - LabelWidth.Value,
                     X = context.CurrentX + this.LabelWidth.Value,
                     Y = context.CurrentY,
                     Value = valueToDisplay
-                });
+                };
+                
+                v.AddProperty(PrintableElementProperty.FontStyle,"Bold");
+                
+                if (this.Precision > 0)
+                {
+                    v.AddProperty(PrintableElementProperty.Precision, this.Precision);
+                }
+                
+                context.AddElement(v);
             }
         }
     }

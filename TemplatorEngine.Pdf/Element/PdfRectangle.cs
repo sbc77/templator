@@ -1,25 +1,22 @@
-﻿using System.Collections.Generic;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
-using TemplatorEngine.Core.Abstract;
-using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
 using TemplatorEngine.Pdf.Abstract;
 
 namespace TemplatorEngine.Pdf.Element
 {
-    public class PdfImage : PdfElementRendererBase
+    public class PdfRect : PdfElementRendererBase
     {
-
         protected override void OnRender(PrintableElement element, PdfPage page)
         {
             using (var gfx = XGraphics.FromPdfPage(page))
             {
-                var img = XImage.FromFile(element.Value.ToString());
-                gfx.DrawImage(img, element.AsXRect());
+                var rect = element.AsXRect();
+                
+                gfx.DrawRectangle(XPens.Transparent, XBrushes.Black, rect);
             }
         }
 
-        public override ElementType ElementType => ElementType.Image;
+        public override ElementType ElementType => ElementType.Rectangle;
     }
 }

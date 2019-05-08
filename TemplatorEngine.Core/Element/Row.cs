@@ -11,6 +11,7 @@ namespace TemplatorEngine.Core.Element
     {
         [XmlElement(Type = typeof(Field)),
         XmlElement(Type = typeof(Line)),
+        XmlElement(Type = typeof(Space)),
         XmlElement(Type = typeof(Label)),
         XmlElement(Type = typeof(Value)),
         XmlElement(Type = typeof(Image)),
@@ -19,9 +20,7 @@ namespace TemplatorEngine.Core.Element
         XmlElement(Type = typeof(Row)),
         XmlElement(Type = typeof(Column))]
         public List<TemplateElementBase> Items { get; set; }
-        
-        public override bool IsLayout => true;
-        
+
         public bool KeepTogether { get; set; }
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {

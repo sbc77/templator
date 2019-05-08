@@ -3,10 +3,10 @@ using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Pdf.Abstract
 {
-    public abstract class PdfElementRendererBase :IPdfElementRenderer 
+    public abstract class PdfElementRendererBase : IPdfElementRenderer
     {
-        protected abstract void OnRender(PrintableElement element,  PdfPage context);
-        
+        protected abstract void OnRender(PrintableElement element, PdfPage context);
+
         public abstract ElementType ElementType { get; }
 
         public void Render(PrintableElement element, PdfPage page)

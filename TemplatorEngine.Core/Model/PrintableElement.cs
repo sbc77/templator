@@ -1,11 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.Reflection.Metadata;
 using System.Xml.Serialization;
 
 namespace TemplatorEngine.Core.Model
 {
     public class PrintableElement
     {
+        public PrintableElement()
+        {
+            this.Properties = new Dictionary<PrintableElementProperty, object> {{PrintableElementProperty.Value, null}};
+        }
         public double X { get; set; }
         
         public double Y { get; set; }
@@ -13,13 +18,25 @@ namespace TemplatorEngine.Core.Model
         public double Width { get; set; }
         
         public double Height { get; set; }
+
+        public object Value
+        {
+            get => this.Properties[PrintableElementProperty.Value];
+            set => this.Properties[PrintableElementProperty.Value] = value;
+        }
         
-        public object Value { get; set; }
+        public Dictionary<PrintableElementProperty,object> Properties { get; }
         
         public ElementType ElementType { get; set; }
-        
-        // public string StyleName { get; set; }
-        
-        public IList<ElementStyle> Style { get; set; } 
+
+        public void AddProperty(PrintableElementProperty property, object value)
+        {
+            this.Properties.Add(property,value);
+        }
+
+        public bool HasProperty(PrintableElementProperty property)
+        {
+            return this.Properties.ContainsKey(property);
+        }
     }
 }

@@ -1,9 +1,5 @@
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
 using System.Xml.Serialization;
 using Newtonsoft.Json;
 using TemplatorEngine.Core.Abstract;
@@ -25,6 +21,7 @@ namespace TemplatorEngine.Core.Element
 
         [XmlElement(Type = typeof(Field)),
         XmlElement(Type = typeof(Line)),
+        XmlElement(Type = typeof(Space)),
         XmlElement(Type = typeof(Label)),
         XmlElement(Type = typeof(Value)),
         XmlElement(Type = typeof(Image)),
@@ -34,7 +31,7 @@ namespace TemplatorEngine.Core.Element
         XmlElement(Type = typeof(Column))]
         public List<TemplateElementBase> Items { get; set; }
         
-        public override bool IsLayout => false;
+        // public override bool IsLayout => false;
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {
             this.Height = 0;

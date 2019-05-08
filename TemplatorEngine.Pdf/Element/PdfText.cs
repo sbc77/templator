@@ -1,6 +1,7 @@
 ﻿
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Drawing.Layout;
 using PdfSharpCore.Pdf;
@@ -18,6 +19,7 @@ namespace TemplatorEngine.Pdf.Element
             using (var gfx = XGraphics.FromPdfPage(context))
             {
                 var tf = new XTextFormatter(gfx);
+                var value = element.Value.ToString();
 
                 if (element.Value is string || element.Value is DateTime)
                 {
@@ -25,12 +27,30 @@ namespace TemplatorEngine.Pdf.Element
                 }
                 else
                 {
+                    if (element.HasProperty(PrintableElementProperty.Precision))
+                    {
+                        var prec = element.Properties[PrintableElementProperty.Precision];
+                        value = Convert.ToDecimal(element.Value).ToString("F" + prec);
+                    }
                     tf.Alignment = XParagraphAlignment.Right;
                 }
                 
                 var labelFont = this.ApplyStyle(element, tf);
 
-                tf.DrawString(element.Value.ToString(), labelFont, XBrushes.Black, element.AsXRect());
+                var rect = element.AsXRect();
+
+                if (element.HasProperty(PrintableElementProperty.Rotate))
+                {
+                    var state = gfx.Save();
+                    var angle = Convert.ToDouble(element.Properties[PrintableElementProperty.Rotate]);
+                    gfx.RotateAtTransform(angle, rect.TopLeft);
+                    tf.DrawString(value, labelFont, XBrushes.Black, rect);
+                    gfx.Restore(state);
+                }
+                else
+                {
+                    tf.DrawString(value, labelFont, XBrushes.Black, rect);
+                }
             }
         }
 
@@ -38,29 +58,30 @@ namespace TemplatorEngine.Pdf.Element
         {
             var fontSize = 12;
             var fontFamily = "Arial Narrow";
+            var fontStyle = XFontStyle.Regular;
+            
 
-            if (element.Style == null)
+            if (element.HasProperty(PrintableElementProperty.Align))
             {
-                return new XFont(fontFamily, fontSize, XFontStyle.Regular);
+                tf.Alignment = Enum.Parse<XParagraphAlignment>(element.Properties[PrintableElementProperty.Align].ToString());
             }
             
-            foreach (var item in element.Style)
+            if (element.HasProperty(PrintableElementProperty.FontSize))
             {
-                switch (item.Attribute)
-                {
-                    case StyleAttribute.Align:
-                        tf.Alignment = Enum.Parse<XParagraphAlignment>(item.Value.ToString());
-                        break;
-                    case StyleAttribute.FontSize:
-                        fontSize = Convert.ToInt32(item.Value);
-                        break;
-                    case StyleAttribute.FontFamily:
-                        fontFamily = item.Value.ToString();
-                        break;
-                }
+                fontSize = Convert.ToInt32(element.Properties[PrintableElementProperty.FontSize]);
             }
 
-            return new XFont(fontFamily, fontSize, XFontStyle.Regular);
+            if (element.HasProperty(PrintableElementProperty.FontFamily))
+            {
+                fontFamily = element.Properties[PrintableElementProperty.FontFamily].ToString();
+            }
+            
+            if (element.HasProperty(PrintableElementProperty.FontStyle))
+            {
+                fontStyle = Enum.Parse<XFontStyle>(element.Properties[PrintableElementProperty.FontStyle].ToString());
+            }
+            
+            return new XFont(fontFamily, fontSize, fontStyle);
         }
 
         public override ElementType ElementType => ElementType.Text;

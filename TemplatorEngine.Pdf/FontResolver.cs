@@ -22,7 +22,7 @@ namespace TemplatorEngine.Pdf
                         continue;
                     }
 
-                    FontFiles.Add(ff);
+                    this.FontFiles.Add(ff);
                 }
             }
 

@@ -1,33 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Template IsDebug="true" >
-    <PageSettings Format="A4" Orientation="Portrait" Margin="5" Spacing="0.5" />
+    <PageSettings Format="A4" Orientation="Portrait" Margin="10" Spacing="0.5" />
     <!--PageHeader>
         <Column>
-            <Label Text = "Invoice" Align="Center" />
-            <Image Src="logo.png" Width="85" Height="30"  />
+            
         </Column>
     </PageHeader-->
     <ReportBody>
         <Column>
+            <Label Text = "Invoice" Align="Center" FontSize="40" />
+            <Barcode Type="GS1-128" DataField="Barcode" Label="SSCC" Scale="0.7" />
+            <Image Src="logo.png" Width="85" Height="30"  />
             <Field Label="Invoice No" DataField="No" />
             <Field Label="Created" DataField="Created" />
-            <Line />
-            
+            <Space Height="10" />
             <Row>
                 <Column>
                     <Label Text="Customer:" />
                     <Line />
                     <Field Label="Name" DataField="CustomerName" />
                 </Column>
+                <Space Width="20" />
                 <Column>
                     <Label Text="Supplier:" />
                     <Line />
                     <Field Label="Name" DataField="SupplierName" />
                 </Column>
             </Row>
-            
-            <Label Text="test"/>
-            
+            <Space Height="10" />
             <Row>
                 <Label Width="5" Text="#"  />
                 <Label Width="20" Text="ArticleId" />
@@ -47,17 +47,18 @@
                     <Value Width="20" DataField="i.ArticleId" />
                     <Value DataField="i.ArticleDescription" />
                     <Value Width="10" DataField="i.UoM" />
-                    <Value Width="10" Style="Quantity" DataField="i.Quantity" />
+                    <Value Width="10" DataField="i.Quantity" />
                     <Value Width="10" Align="Center" DataField="i.TaxId" />
-                    <Value Width="15" Style="Money" DataField="i.NetAmount" />
-                    <Value Width="15" Style="Money" DataField="i.TaxAmount" />
-                    <Value Width="15" Style="Money" DataField="i.Amount" />
+                    <Value Width="15" Precision="2" DataField="i.NetAmount" />
+                    <Value Width="15" Precision="2" DataField="i.TaxAmount" />
+                    <Value Width="15" Precision="2" DataField="i.Amount" />
                 </Row>
-                <line />
             </Iterator>
-            <line />
-            <Field DataField="TotalAmount" />
-            <Field DataField="TotalNetAmount" />
+            <Line />
+            <Space Height="10" />
+            
+            <Field DataField="TotalAmount" Label="Total amount:" Precision="2" />
+            <Field DataField="TotalNetAmount" Label="Total net amount:" Precision="2" />
         
         </Column>
     </ReportBody>

@@ -19,6 +19,7 @@
         <Folder Include="Element\" />
     </ItemGroup>
     <ItemGroup>
+      <PackageReference Include="BarcodeCore" Version="1.0.1" />
       <PackageReference Include="Newtonsoft.Json" Version="12.0.1" />
     </ItemGroup>
 </Project>
