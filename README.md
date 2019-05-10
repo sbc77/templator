@@ -55,3 +55,5 @@ using this code:
             
             File.WriteAllBytes("Result/label.pdf",bytes);
 ```
+Example invoice:
+![Example invoice](InvoiceExample.png "Invoice")
