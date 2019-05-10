@@ -39,7 +39,7 @@ You can turn this:
 </Template>
 ```
 into this:
-![Example label](example.png "Label")
+![Example label](LabelExample.png "Label")
 using this code:
 ```C#
 var data = new Gs1Data
