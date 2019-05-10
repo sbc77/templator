@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using PdfSharpCore.Drawing;
+﻿using PdfSharpCore.Drawing;
 using PdfSharpCore.Pdf;
-using TemplatorEngine.Core.Abstract;
-using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
 using TemplatorEngine.Pdf.Abstract;
 

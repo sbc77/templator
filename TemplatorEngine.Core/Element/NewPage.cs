@@ -1,36 +1,33 @@
-﻿using System.Collections.Generic;
-using System.Xml.Serialization;
+using System.Collections.Generic;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Model;
 
 namespace TemplatorEngine.Core.Element
 {
-    public class Image : TemplateElementBase
+    public class NewPage : TemplateElementBase
     {
-        [XmlAttribute]
-        public string Src { get; set; }
-        
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {
             if (this.Height == null)
             {
-                this.Height = maxHeight ?? context.MaxPageHeight;
+                this.Height = 0;
             }
 
             if (this.Width == null)
             {
-                this.Width = maxWidth ?? context.MaxPageWidth;
+                this.Width = 0;
             }
-
+            
             var pe = new PrintableElement
             {
-                ElementType = ElementType.Image,
+                ElementType = ElementType.NewPage,
                 Height = this.Height.Value,
                 Width = this.Width.Value,
                 X = context.CurrentX ,
-                Y = context.CurrentY, 
-                Value = this.Src
+                Y = context.CurrentY 
             };
+
+            context.CurrentY = context.PageSettings.Margin.Value;
 
             context.AddElement(pe);
         }

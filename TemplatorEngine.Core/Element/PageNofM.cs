@@ -11,7 +11,7 @@ namespace TemplatorEngine.Core.Element
         // public override bool IsLayout => false;
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {
-            throw new System.NotImplementedException();
+            
         }
     }
 }

@@ -12,7 +12,7 @@ namespace pdfCoreTest
     {
         static void Main(string[] args)
         {
-           //GenerateLabel();
+           GenerateLabel();
            GenerateInvoice();
         }
 

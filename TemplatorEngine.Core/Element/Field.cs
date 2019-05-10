@@ -44,6 +44,11 @@ namespace TemplatorEngine.Core.Element
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context,
             IList<PropertyData> data)
         {
+            if (this.Lines == 0)
+            {
+                this.Lines = 1;
+            }
+            
             var dataItem = data.SingleOrDefault(x => x.Name == this.DataField);
 
             if (dataItem == null)
@@ -66,13 +71,9 @@ namespace TemplatorEngine.Core.Element
 
             if (this.Height == null)
             {
-                this.Height = this.FontSize * context.FontSizeHeightRatio;
+                this.Height = this.FontSize * context.FontSizeHeightRatio*this.Lines;
             }
 
-            if (this.ValueAlign == null)
-            {
-                this.ValueAlign = "Left";
-            }
 
             if (this.LabelAlign == null)
             {
@@ -97,27 +98,34 @@ namespace TemplatorEngine.Core.Element
                 });
             }
 
-            if (valueToDisplay != null)
+            if (valueToDisplay == null)
             {
-                var v = new PrintableElement
-                {
-                    ElementType = ElementType.Text,
-                    Height = this.Height.Value,
-                    Width = this.Width.Value - LabelWidth.Value,
-                    X = context.CurrentX + this.LabelWidth.Value,
-                    Y = context.CurrentY,
-                    Value = valueToDisplay
-                };
-                
-                v.AddProperty(PrintableElementProperty.FontStyle,"Bold");
-                
-                if (this.Precision > 0)
-                {
-                    v.AddProperty(PrintableElementProperty.Precision, this.Precision);
-                }
-                
-                context.AddElement(v);
+                return;
             }
+            
+            var v = new PrintableElement
+            {
+                ElementType = ElementType.Text,
+                Height = this.Height.Value,
+                Width = this.Width.Value - this.LabelWidth.Value,
+                X = context.CurrentX + this.LabelWidth.Value,
+                Y = context.CurrentY,
+                Value = valueToDisplay
+            };
+                
+            v.AddProperty(PrintableElementProperty.FontStyle,"Bold");
+                
+            if (this.ValueAlign != null)
+            {
+                v.AddProperty(PrintableElementProperty.Align, this.ValueAlign);
+            }
+                
+            if (this.Precision > 0)
+            {
+                v.AddProperty(PrintableElementProperty.Precision, this.Precision);
+            }
+                
+            context.AddElement(v);
         }
     }
 }

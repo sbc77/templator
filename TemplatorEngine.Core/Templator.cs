@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.IO;
@@ -40,34 +39,32 @@ namespace TemplatorEngine.Core
             return this.renderer.Render(pages);
         }
 
-        private IEnumerable<Page> GetPages(IList<PrintableElement> elements)
+        private IEnumerable<Page> GetPages(IEnumerable<PrintableElement> elements)
         {
             var pages = new List<Page>();
 
-            var pageCount = Math.Ceiling( elements.Max(x => x.Y + x.Height)/ this.PrintTemplate.PageSettings.Height);
-
-            var y = this.PrintTemplate.PageSettings.Margin.Value;
-
-            for (var i = 1; i <= pageCount; i++)
-            {
-                pages.Add(new Page
-                {
-                    Elements = new List<PrintableElement>(),
-                    Height = this.PrintTemplate.PageSettings.Height,
-                    Width= this.PrintTemplate.PageSettings.Width,
-                    MinY = y,
-                    MaxY = y + this.PrintTemplate.PageSettings.Height-this.PrintTemplate.PageSettings.Margin.Value*2
-                });
-
-                y += this.PrintTemplate.PageSettings.Height - this.PrintTemplate.PageSettings.Margin.Value*2;
-            }
-
+            Page currentPage = null;
             foreach (var element in elements)
             {
-                var p = pages.Single(x => element.Y+element.Height >= x.MinY && element.Y+element.Height < x.MaxY);
+                if (element.ElementType == ElementType.NewPage)
+                {
+                    currentPage = new Page
+                    {
+                        Elements = new List<PrintableElement>(),
+                        Height = this.PrintTemplate.PageSettings.Height,
+                        Width = this.PrintTemplate.PageSettings.Width
+                    };
+                    
+                    pages.Add(currentPage);
+                    continue;
+                }
+                
+                currentPage.Elements.Add(element);
+            }
 
-                element.Y -= p.MinY - this.PrintTemplate.PageSettings.Margin.Value; // restart Y from 0;
-                p.Elements.Add(element);
+            if (currentPage.Elements.Count == 0)
+            {
+                pages.Remove(currentPage);
             }
 
             return pages;

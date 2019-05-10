@@ -5,6 +5,7 @@ namespace TemplatorEngine.Core.Model
         Text,
         Line,
         Rectangle,
-        Image
+        Image,
+        NewPage
     }
 }

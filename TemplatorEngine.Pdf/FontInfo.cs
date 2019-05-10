@@ -31,7 +31,7 @@ namespace TemplatorEngine.Pdf
 
         private void ProcessBold()
         {
-            var boldKeys = new string[] { "bold", "800", "700", "600" };
+            var boldKeys = new[] { "bold", "800", "700", "600" };
 
             foreach (var item in boldKeys)
             {

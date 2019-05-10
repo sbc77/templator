@@ -1,7 +1,5 @@
-using System;
 using System.Collections.Generic;
 using PdfSharpCore.Drawing;
-using PdfSharpCore.Drawing.Layout;
 using PdfSharpCore.Pdf;
 using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Element;
@@ -33,7 +31,7 @@ namespace TemplatorEngineCore.Test
                                 Items = new List<TemplateElementBase>
                                 {
                                     new Label {Text = "This is label 1 of column 1"},
-                                    new Label {Text = "This is label 2 of column 1"},
+                                    new Label {Text = "This is label 2 of column 1"}
                                 }
                             },
 
@@ -43,7 +41,7 @@ namespace TemplatorEngineCore.Test
                                 {
                                     new Label {Text = "This is label 1 of column 2"},
                                     new Label {Text = "This is label 2 of column 2"},
-                                    new Label {Text = "This is label 3 of column 2"},
+                                    new Label {Text = "This is label 3 of column 2"}
                                 }
                             }
                         }

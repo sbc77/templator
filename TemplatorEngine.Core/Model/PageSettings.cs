@@ -6,7 +6,7 @@ namespace TemplatorEngine.Core.Model
 {
     public class PageSettings
     {
-        private readonly IEnumerable<PageDimension> dimensions = new List<PageDimension>()
+        private readonly IEnumerable<PageDimension> dimensions = new List<PageDimension>
         {
             new PageDimension("A0", 841, 1189),
             new PageDimension("A1", 594, 841),

@@ -19,6 +19,7 @@ namespace TemplatorEngine.Core.Element
         XmlElement(Type = typeof(Barcode)),
         XmlElement(Type = typeof(Iterator)),
         XmlElement(Type = typeof(Row)),
+        XmlElement(Type = typeof(NewPage)),
         XmlElement(Type = typeof(Column))]
         public List<TemplateElementBase> Items { get; set; }
         
@@ -43,14 +44,22 @@ namespace TemplatorEngine.Core.Element
                 context.CurrentX = currentX;
                 
                 item.Initialize(this.Width, item.Height-context.PageSettings.Spacing, context,  data);
-                
+
+                if (context.NewPageCreated)
+                {
+                    context.NewPageCreated = false;
+                    this.Height = -context.PageSettings.Spacing.Value;
+                }
+
                 context.CurrentY += item.Height.Value + context.PageSettings.Spacing.Value;
+                
 
                 this.Height += item.Height+ context.PageSettings.Spacing;
             }
 
             this.Height -= context.PageSettings.Spacing;
             context.CurrentX = currentX;
+            
         }
     }
 }

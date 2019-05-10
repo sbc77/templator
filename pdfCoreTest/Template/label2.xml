@@ -1,27 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Template Debug="true">
-    <PageSettings Format="A5" Orientation="Portrait" Margin="25" FontSize="18" />
-    <PageHeader>
-        <Line />
-        <Label Text = "Crossdocking 2" Align="Center" />
-        <Image Src="logo.png" Width="85" Height="30"  />
-    </PageHeader>
+<Template IsDebug="false">
+    <PageSettings Format="A5" Orientation="Portrait" Margin="5" FontSize="18" />
     <ReportBody>
-        <Iterator ItemReferenceName="i" DataField="Rows" UseNewPage="true">
-            <Items>
-                <Line />
-                <Field Label="Verpackung:" DataField="i.Package" LabelWidth="250" Height="25"  />
-                <Field Label="Haus-Rayon od. VZ-Warengruppe:" DataField="Group" LabelWidth="250" Height="25"  />
-                <Line />
-                <Field DataField="CustomerReference" Label="ORDERS Nr:" LabelWidth="200" Height="25" />
-                <Field DataField="ShipmentId" Label="DESADV Nr:" LabelWidth="200" Height="25" />
-                <Line />
-                <Label Height="150" Text=" " />
-                <Line />
-                <Label Height="20" Text=" " />
-                <Barcode Type="GS1-128" DataField="i.Barcode2" Height="150" Label="SSCC" LabelFontSize="30" />
-                
-            </Items>
-        </Iterator>
+        <Column>
+            <Iterator ItemReferenceName="i" DataField="Rows" UseNewPage="true">
+                <Column>
+                    <Line />
+                    <Label Text = "Crossdocking 2" Align="Center" />
+                    <Image Src="logo.png" Width="85" Height="30"  />
+                    <Line />
+                    <Field Label="Verpackung:" DataField="i.Package"   />
+                    <Field Label="Haus-Rayon od. VZ-Warengruppe:" DataField="Group"   />
+                    <Line />
+                    <Field DataField="CustomerReference" Label="ORDERS Nr:"  />
+                    <Field DataField="ShipmentId" Label="DESADV Nr:"  />
+                    <Line />
+                    <Space Height="20"  />
+                    <Line />
+                    <Space Height="10"/>
+                    <Barcode Type="GS1-128" DataField="i.Barcode2" Height="20"  Label="SSCC" LabelFontSize="20" Scale=".5" />
+                    <NewPage />
+                </Column>
+            </Iterator>
+        </Column>
     </ReportBody>
 </Template>

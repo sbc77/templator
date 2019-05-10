@@ -10,7 +10,7 @@ namespace TemplatorEngine.Core.Element
 {
     public class Barcode : TemplateElementBase
     {
-        const int BarcodeStringFontSize = 14;
+        private const int BarcodeStringFontSize = 14;
         
         [XmlAttribute]
         public string DataField { get; set; }
@@ -69,14 +69,14 @@ namespace TemplatorEngine.Core.Element
             }
             
             var scale = this.Scale > 0 ? this.Scale : 1;
-            var barLength = this.Height.Value - BarcodeStringHeight;
+            var barLength = this.Height.Value - this.BarcodeStringHeight;
 
             if (this.Label != null)
             {
                 this.PrintBarcodeLabel(context, barLength);
             }
             
-            barcode.OnRenderBar = (bar) =>
+            barcode.OnRenderBar = bar =>
             {
                 var barWidth = bar.Width  * scale;
                 

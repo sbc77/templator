@@ -1,16 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<Template IsDebug="true" >
+<Template IsDebug="false" >
     <PageSettings Format="A4" Orientation="Portrait" Margin="10" Spacing="0.5" />
-    <!--PageHeader>
-        <Column>
-            
-        </Column>
-    </PageHeader-->
     <ReportBody>
         <Column>
-            <Label Text = "Invoice" Align="Center" FontSize="40" />
-            <Barcode Type="GS1-128" DataField="Barcode" Label="SSCC" Scale="0.7" />
-            <Image Src="logo.png" Width="85" Height="30"  />
+            <Row>
+                <Image Src="logo.png" Width="85" Height="30"  />
+                <Label Text="Invoice" Align="Right" FontSize="40" />
+            </Row>
+            <Barcode Type="GS1-128" DataField="Barcode" Label="CODE" Scale="0.7" />
+            <Space Height="10" />
             <Field Label="Invoice No" DataField="No" />
             <Field Label="Created" DataField="Created" />
             <Space Height="10" />
@@ -28,19 +26,22 @@
                 </Column>
             </Row>
             <Space Height="10" />
+            
+            <!-- Table header -->
             <Row>
                 <Label Width="5" Text="#"  />
                 <Label Width="20" Text="ArticleId" />
                 <Label Text="Description" />
                 <Label Width="10" Text="UoM" />
-                <Label Width="10" Text="Qty" />
-                <Label Width="10" Text="Tax" />
-                <Label Width="15" Text="Net" />
-                <Label Width="15" Text="Tax" />
-                <Label Width="15" Text="Gross" />
+                <Label Width="10" Text="Qty" Align="Right" />
+                <Label Width="10" Text="Tax" Align="Right" />
+                <Label Width="15" Text="Net" Align="Right" />
+                <Label Width="15" Text="Tax" Align="Right" />
+                <Label Width="15" Text="Gross" Align="Right" />
             </Row>
             <Line />
-            
+
+            <!-- Table lines -->
             <Iterator ItemReferenceName="i" DataField="Items">
                 <Row>
                     <Value Width="5" DataField="i.PosNo"  Align="Center" />
@@ -48,7 +49,7 @@
                     <Value DataField="i.ArticleDescription" />
                     <Value Width="10" DataField="i.UoM" />
                     <Value Width="10" DataField="i.Quantity" />
-                    <Value Width="10" Align="Center" DataField="i.TaxId" />
+                    <Value Width="10" Align="Right" DataField="i.TaxId" />
                     <Value Width="15" Precision="2" DataField="i.NetAmount" />
                     <Value Width="15" Precision="2" DataField="i.TaxAmount" />
                     <Value Width="15" Precision="2" DataField="i.Amount" />
@@ -59,7 +60,7 @@
             
             <Field DataField="TotalAmount" Label="Total amount:" Precision="2" />
             <Field DataField="TotalNetAmount" Label="Total net amount:" Precision="2" />
-        
+            
         </Column>
     </ReportBody>
 </Template>

@@ -15,9 +15,6 @@ namespace TemplatorEngine.Core.Element
         
         [XmlAttribute]
         public string ItemReferenceName { get; set; }
-        
-        [XmlAttribute]
-        public bool UseNewPage { get; set; }
 
         [XmlElement(Type = typeof(Field)),
         XmlElement(Type = typeof(Line)),
@@ -28,6 +25,7 @@ namespace TemplatorEngine.Core.Element
         XmlElement(Type = typeof(Barcode)),
         XmlElement(Type = typeof(Iterator)),
         XmlElement(Type = typeof(Row)),
+        XmlElement(Type = typeof(NewPage)),
         XmlElement(Type = typeof(Column))]
         public List<TemplateElementBase> Items { get; set; }
         
@@ -46,12 +44,6 @@ namespace TemplatorEngine.Core.Element
             
             foreach (var row in rows)
             {
-                /*
-                if (this.UseNewPage)
-                {
-                    context.RequestNewPage();
-                }*/
-
                 var flatten = this.ConvertData(row, data);
                 var items = new List<TemplateElementBase>();
 

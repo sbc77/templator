@@ -26,7 +26,7 @@ namespace TemplatorEngine.Core.Element
                 Height = this.Height.Value,
                 Width = this.Width.Value,
                 X = context.CurrentX ,
-                Y = context.CurrentY, 
+                Y = context.CurrentY 
             };
 
             context.AddElement(pe);

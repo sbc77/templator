@@ -20,8 +20,7 @@ namespace TemplatorEngine.Core.Element
         XmlElement(Type = typeof(Row)),
         XmlElement(Type = typeof(Column))]
         public List<TemplateElementBase> Items { get; set; }
-
-        public bool KeepTogether { get; set; }
+        
         public override void Initialize(double? maxWidth, double? maxHeight, RenderContext context, IList<PropertyData> data)
         {
             var ps = context.PageSettings;
@@ -51,20 +50,28 @@ namespace TemplatorEngine.Core.Element
             var currentY = context.CurrentY;
             foreach (var item in this.Items)
             {
-                
-                
                 if (item.Width == null)
                 {
                     item.Width = autoSizedSegmentWidth;
                 }
-                
-                item.Initialize(item.Width, this.Height,context, data);
+
+                item.Initialize(item.Width, this.Height, context, data);
 
                 context.CurrentX += item.Width.Value + ps.Spacing.Value;
-                
+
                 this.Width += item.Width + ps.Spacing;
+
+                if (context.NewPageCreated)
+                {
+                    currentY = context.CurrentY;
+                    context.NewPageCreated = false;
+                }
+                else
+                {
+                    context.CurrentY = currentY;    
+                }
                 
-                context.CurrentY = currentY;
+
             }
 
             this.Height = this.Items.Max(x => x.Height);

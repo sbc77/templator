@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using TemplatorEngine.Core.Abstract;
 
 namespace TemplatorEngine.Core.Model
 {

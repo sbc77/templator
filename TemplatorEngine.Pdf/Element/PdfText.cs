@@ -1,12 +1,8 @@
 ﻿
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Drawing.Layout;
 using PdfSharpCore.Pdf;
-using TemplatorEngine.Core.Abstract;
-using TemplatorEngine.Core.Element;
 using TemplatorEngine.Core.Model;
 using TemplatorEngine.Pdf.Abstract;
 
@@ -20,6 +16,10 @@ namespace TemplatorEngine.Pdf.Element
             {
                 var tf = new XTextFormatter(gfx);
                 var value = element.Value.ToString();
+                
+                XStringFormat format = new XStringFormat();
+                format.LineAlignment = XLineAlignment.Near;
+                format.Alignment = XStringAlignment.Near;
 
                 if (element.Value is string || element.Value is DateTime)
                 {
@@ -44,12 +44,12 @@ namespace TemplatorEngine.Pdf.Element
                     var state = gfx.Save();
                     var angle = Convert.ToDouble(element.Properties[PrintableElementProperty.Rotate]);
                     gfx.RotateAtTransform(angle, rect.TopLeft);
-                    tf.DrawString(value, labelFont, XBrushes.Black, rect);
+                    tf.DrawString(value, labelFont, XBrushes.Black, rect, format);
                     gfx.Restore(state);
                 }
                 else
                 {
-                    tf.DrawString(value, labelFont, XBrushes.Black, rect);
+                    tf.DrawString(value, labelFont, XBrushes.Black, rect, format);
                 }
             }
         }

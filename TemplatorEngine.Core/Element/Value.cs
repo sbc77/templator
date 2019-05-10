@@ -10,6 +10,8 @@ namespace TemplatorEngine.Core.Element
     public class Value : TemplateElementBase
     {
         [XmlAttribute] public string DataField { get; set; }
+        
+        [XmlAttribute] public string FontStyle { get; set; }
 
         [XmlAttribute] public int Lines { get; set; }
 
@@ -43,7 +45,7 @@ namespace TemplatorEngine.Core.Element
                 ElementType = ElementType.Text,
                 X = context.CurrentX,
                 Y = context.CurrentY,
-                Value = valueToDisplay,
+                Value = valueToDisplay
             };
 
             if (this.FontSize == null)
@@ -53,6 +55,11 @@ namespace TemplatorEngine.Core.Element
             else
             {
                 pe.AddProperty(PrintableElementProperty.FontSize,this.FontSize);
+            }
+
+            if (this.FontStyle != null)
+            {
+                pe.AddProperty(PrintableElementProperty.FontStyle,this.FontStyle);
             }
 
             if (this.Width == null)

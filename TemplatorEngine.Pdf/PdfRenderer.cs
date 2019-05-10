@@ -1,7 +1,5 @@
 ﻿using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Fonts;
 using PdfSharpCore.Pdf;

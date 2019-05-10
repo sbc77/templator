@@ -1,12 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
-using PdfSharpCore;
 using PdfSharpCore.Drawing;
 using PdfSharpCore.Drawing.Layout;
 using PdfSharpCore.Pdf;
-using TemplatorEngine.Core.Abstract;
 using TemplatorEngine.Core.Model;
 using TemplatorEngine.Pdf.Abstract;
 using TemplatorEngine.Pdf.Element;
@@ -46,18 +43,6 @@ namespace TemplatorEngine.Pdf
             }
 
             return r;
-        }
-
-        private static bool HasContent(PdfPage page)
-        {
-            for(var i = 0; i < page.Contents.Elements.Count; i++)
-            {
-                if (page.Contents.Elements.GetDictionary(i).Stream.Length > 76)
-                {
-                    return true;
-                }
-            }
-            return false;
         }
 
         public void Render(PrintableElement element, PdfPage page)
