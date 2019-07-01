@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Template IsDebug="false">
-    <PageSettings Format="A5" Orientation="Portrait" Margin="5" />
+    <PageSettings Format="A5" Orientation="Portrait" Margin="5" FontSize="15"/>
     <ReportBody>
         <Column>
             <Iterator ItemReferenceName="i" DataField="Rows">

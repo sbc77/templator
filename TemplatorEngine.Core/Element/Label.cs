@@ -72,6 +72,12 @@ namespace TemplatorEngine.Core.Element
             {
                 pe.AddProperty(PrintableElementProperty.Rotate,this.Rotate);
             }
+            
+            if (this.FontSize!=null && this.FontSize.Value > 0)
+            {
+                pe.AddProperty(PrintableElementProperty.FontSize, this.FontSize);
+            }
+            
 
             pe.Height = this.Height.Value;
             pe.Width = this.Width.Value;

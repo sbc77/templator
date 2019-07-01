@@ -87,7 +87,7 @@ namespace TemplatorEngine.Core.Element
 
             if (!string.IsNullOrEmpty(labelToDisplay))
             {
-                context.AddElement(new PrintableElement
+                var lbl = new PrintableElement
                 {
                     ElementType = ElementType.Text,
                     Height = this.Height.Value,
@@ -95,7 +95,14 @@ namespace TemplatorEngine.Core.Element
                     X = context.CurrentX,
                     Y = context.CurrentY,
                     Value = labelToDisplay
-                });
+                };
+                
+                if (this.FontSize!=null && this.FontSize.Value > 0)
+                {
+                    lbl.AddProperty(PrintableElementProperty.FontSize, this.FontSize);
+                }
+                
+                context.AddElement(lbl);
             }
 
             if (valueToDisplay == null)
@@ -123,6 +130,11 @@ namespace TemplatorEngine.Core.Element
             if (this.Precision > 0)
             {
                 v.AddProperty(PrintableElementProperty.Precision, this.Precision);
+            }
+            
+            if (this.FontSize!=null && this.FontSize.Value > 0)
+            {
+                v.AddProperty(PrintableElementProperty.FontSize, this.FontSize);
             }
                 
             context.AddElement(v);

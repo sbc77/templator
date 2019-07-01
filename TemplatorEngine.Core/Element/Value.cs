@@ -85,6 +85,11 @@ namespace TemplatorEngine.Core.Element
             {
                 pe.AddProperty(PrintableElementProperty.Precision, this.Precision);
             }
+            
+            if (this.FontSize!=null && this.FontSize.Value > 0)
+            {
+                pe.AddProperty(PrintableElementProperty.FontSize, this.FontSize);
+            }
 
             pe.Height = this.Height.Value;
             pe.Width = this.Width.Value;

@@ -32,6 +32,7 @@ namespace TemplatorEngine.Pdf.Element
                         var prec = element.Properties[PrintableElementProperty.Precision];
                         value = Convert.ToDecimal(element.Value).ToString("F" + prec);
                     }
+                    
                     tf.Alignment = XParagraphAlignment.Right;
                 }
                 
@@ -56,10 +57,10 @@ namespace TemplatorEngine.Pdf.Element
 
         private XFont ApplyStyle(PrintableElement element, XTextFormatter tf)
         {
+
             var fontSize = 12;
             var fontFamily = "Arial Narrow";
             var fontStyle = XFontStyle.Regular;
-            
 
             if (element.HasProperty(PrintableElementProperty.Align))
             {
