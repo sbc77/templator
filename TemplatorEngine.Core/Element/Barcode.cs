@@ -26,6 +26,9 @@ namespace TemplatorEngine.Core.Element
         
         [XmlAttribute]
         public double Scale { get; set; }
+        
+        [XmlAttribute]
+        public double Thickness { get; set; }
 
         private double BarcodeStringHeight => BarcodeStringFontSize / 3.0;
 
@@ -58,6 +61,11 @@ namespace TemplatorEngine.Core.Element
                 this.LabelFontSize = 16;
             }
 
+            if (this.Thickness <= 0)
+            {
+                this.Thickness = 1;
+            }
+
             var barcode = this.GetBarcode();
             
             this.Width = 0;
@@ -78,7 +86,7 @@ namespace TemplatorEngine.Core.Element
             
             barcode.OnRenderBar = bar =>
             {
-                var barWidth = bar.Width  * scale;
+                var barWidth = bar.Width * this.Thickness * scale;
                 
                 var curX = context.CurrentX + posX + bar.X * scale;
 

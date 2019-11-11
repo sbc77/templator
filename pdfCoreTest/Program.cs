@@ -13,7 +13,7 @@ namespace pdfCoreTest
         static void Main(string[] args)
         {
            GenerateLabel();
-           GenerateInvoice();
+           // GenerateInvoice();
         }
 
         private static void GenerateLabel()
