@@ -10,7 +10,7 @@ namespace TemplatorEngine.Core.Element
 {
     public class Barcode : TemplateElementBase
     {
-        private const int BarcodeStringFontSize = 14;
+        private const int BarcodeStringFontSize = 12;
         
         [XmlAttribute]
         public string DataField { get; set; }
@@ -71,7 +71,7 @@ namespace TemplatorEngine.Core.Element
             this.Width = 0;
             var posX = 0.0;
 
-            if (this.Label != null)
+            if (!string.IsNullOrWhiteSpace(this.Label))
             {
                 posX = this.LabelFontSize;
             }
@@ -140,7 +140,7 @@ namespace TemplatorEngine.Core.Element
 
             barStr.AddProperty(PrintableElementProperty.FontFamily, "Courier New");
             barStr.AddProperty(PrintableElementProperty.FontSize, BarcodeStringFontSize);
-            barStr.AddProperty(PrintableElementProperty.Align, "Center");
+            barStr.AddProperty(PrintableElementProperty.Align, "Left");
 
             context.AddElement(barStr);
         }
