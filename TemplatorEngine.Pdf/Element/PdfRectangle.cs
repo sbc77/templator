@@ -13,7 +13,7 @@ namespace TemplatorEngine.Pdf.Element
             {
                 var rect = element.AsXRect();
                 
-                gfx.DrawRectangle(XPens.Transparent, XBrushes.Black, rect);
+                gfx.DrawRectangle(null, XBrushes.Black, rect);
             }
         }
 
